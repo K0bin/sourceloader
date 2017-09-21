@@ -1,0 +1,73 @@
+﻿/*
+Distroir.BSP
+Copyright (C) 2017 Distroir
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+using System.IO;
+
+namespace Bsp
+{
+    public class Map
+    {
+        /// <summary>
+        /// BSP file identifier
+        /// </summary>
+        public int Identifier;
+        /// <summary>
+        /// BSP file version
+        /// </summary>
+        public int Version;
+        /// <summary>
+        /// lump directory array
+        /// </summary>
+        public Lump[] Lumps;
+        /// <summary>
+        /// Map's revision number
+        /// </summary>
+        public int MapRevision;
+
+        public static Map Load(BinaryReader reader)
+        {
+            Map info = new Map();
+
+            //Read identifier
+            info.Identifier = reader.ReadInt32();
+
+            //Validate identifier
+            //Little-endian "VBSP"   0x50534256
+            if (info.Identifier != 0x50534256)
+            {
+                throw new IOException("Wrong file format");
+            }
+
+            //Read version
+            info.Version = reader.ReadInt32();
+
+            //Read game lumps
+            info.Lumps = new Lump[64];
+
+            for (int i = 0; i < 64; i++)
+            {
+                info.Lumps[i] = Lump.Read(reader, (LumpType)i);
+            }
+
+            //Read map revision number
+            info.MapRevision = reader.ReadInt32();
+
+            //Return value
+            return info;
+        }
+    }
+}
