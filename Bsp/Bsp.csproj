@@ -8,4 +8,8 @@
     <PackageReference Include="System.Numerics.Vectors" Version="4.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Util\Util.csproj" />
+  </ItemGroup>
+
 </Project>

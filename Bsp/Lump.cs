@@ -15,10 +15,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-using Bsp.LumpData;
+using CsgoDemoRenderer.Bsp.LumpData;
 using System.IO;
+using System.Numerics;
 
-namespace Bsp
+namespace CsgoDemoRenderer.Bsp
 {
     public struct Lump
     {
@@ -41,7 +42,7 @@ namespace Bsp
 
         public LumpType Offset;
 
-        public LumpData.Data Data;
+        public LumpData.LumpData Data;
 
         public static Lump Read(BinaryReader reader, LumpType offset)
         {
@@ -56,52 +57,52 @@ namespace Bsp
             switch (lump.Offset)
             {
                 case LumpType.Planes:
-                    lump.Data = Planes.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<LumpData.Plane>(reader, lump.FileLength);
                     break;
                 case LumpType.Vertices:
-                    lump.Data = Vertices.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<Vector3>(reader, lump.FileLength);
                     break;
                 case LumpType.Edges:
-                    lump.Data = Edges.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<Edge>(reader, lump.FileLength);
                     break;
                 case LumpType.SurfaceEdges:
-                    lump.Data = SurfaceEdges.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<int>(reader, lump.FileLength);
                     break;
                 case LumpType.Faces:
-                    lump.Data = Faces.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<Face>(reader, lump.FileLength);
                     break;
                 case LumpType.OriginalFaces:
-                    lump.Data = OriginalFaces.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<Face>(reader, lump.FileLength);
                     break;
                 case LumpType.Brushes:
-                    lump.Data = Brushes.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<Brush>(reader, lump.FileLength);
                     break;
                 case LumpType.BrushSides:
-                    lump.Data = BrushSides.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<BrushSide>(reader, lump.FileLength);
                     break;
                 case LumpType.Nodes:
-                    lump.Data = Nodes.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<Node>(reader, lump.FileLength);
                     break;
                 case LumpType.Leafs:
-                    lump.Data = Leafs.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<Leaf>(reader, lump.FileLength);
                     break;
                 case LumpType.LeafFaces:
-                    lump.Data = LeafFaces.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<ushort>(reader, lump.FileLength);
                     break;
                 case LumpType.LeafBrushes:
-                    lump.Data = LeafBrushes.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<ushort>(reader, lump.FileLength);
                     break;
                 case LumpType.TextureInfo:
-                    lump.Data = TextureInfos.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<TextureInfo>(reader, lump.FileLength);
                     break;
                 case LumpType.TextureData:
-                    lump.Data = TextureDatas.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<TextureData>(reader, lump.FileLength);
                     break;
                 case LumpType.TextureStringData:
-                    lump.Data = TextureDataString.Read(reader, lump.FileLength);
+                    lump.Data = new TextureDataString(reader, lump.FileLength);
                     break;
                 case LumpType.TextureDataStringTable:
-                    lump.Data = TextureDataStringTable.Read(reader, lump.FileLength);
+                    lump.Data = new ArrayLumpData<int>(reader, lump.FileLength);
                     break;
             }
             reader.BaseStream.Position = position;

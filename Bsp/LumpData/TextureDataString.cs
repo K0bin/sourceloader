@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Bsp.LumpData
+namespace CsgoDemoRenderer.Bsp.LumpData
 {
-    public class TextureDataString: Data
+    public class TextureDataString: LumpData
     {
-        public string All;
-        private TextureDataString() { }
-        public static TextureDataString Read(BinaryReader reader, int length)
+        public string All
         {
-            var textures = new TextureDataString();
+            get; private set;
+        }
+        public TextureDataString(BinaryReader reader, int length)
+        {
             var bytes = reader.ReadBytes(length);
-            var str = Encoding.ASCII.GetString(bytes);
-            textures.All = str;
-            return textures;
+            All = Encoding.ASCII.GetString(bytes);
         }
 
         private string GetPart(int offset)

@@ -3,44 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Bsp.LumpData
+namespace CsgoDemoRenderer.Bsp.LumpData
 {
-    public class Brushes: Data
+    public struct Brush
     {
-        public Brush[] Elements;
-        private Brushes() { }
-
-        public static Brushes Read(BinaryReader reader, int length)
-        {
-            var size = length / Brush.SIZE;
-            
-            var brushes = new Brushes();
-            brushes.Elements = new Brush[size];
-            for (var i = 0; i < size; i++)
-            {
-                brushes.Elements[i] = Brush.Read(reader);
-            }
-            return brushes;
-        }
-    }
-
-    public class Brush
-    {
-        public const int SIZE = 12;
-
         public int firstSide;
         public int SidesCount;
         public BrushContents Contents;
-        private Brush() { }
-
-        public static Brush Read(BinaryReader reader)
-        {
-            var brush = new Brush();
-            brush.firstSide = reader.ReadInt32();
-            brush.SidesCount = reader.ReadInt32();
-            brush.Contents = (BrushContents)reader.ReadInt32();
-            return brush;
-        }
 
         [Flags]
         public enum BrushContents
