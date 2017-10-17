@@ -66,17 +66,30 @@ namespace CsgoDemoRenderer
                 GL.TextureParameter(oglTexture, TextureParameterName.TextureMaxLevel, texture.Mipmaps.Length);
                 texI++;
                 if (texture.Mipmaps[0].Format == Vtf.ImageFormat.Dxt1)
-                { 
+                {
+                    if (part.Texture.Mipmaps.Length < 1 || part.Texture.Mipmaps[0].Width < 1 || part.Texture.Mipmaps[0].Height < 1 || oglTexture == 0)
+                    {
+                        continue;
+                    }
                     GL.TextureStorage2D(oglTexture, part.Texture.Mipmaps.Length, (SizedInternalFormat)All.CompressedRgbS3tcDxt1Ext, part.Texture.Mipmaps[0].Width, part.Texture.Mipmaps[0].Height);
+                    if (GL.GetError() != ErrorCode.NoError)
+                    {
+                        //throw new Exception();
+                    }
+
                     for (var i = 0; i < texture.Mipmaps.Length; i++)
                     {
                         var mipmap = texture.Mipmaps[i];
-                        var data = new byte[mipmap.Data.GetLength(2)];
-                        for (var ii = 0; ii < data.Length; ii++)
+                        var slice = mipmap.Frames.First().Faces.First().Slices.First();
+                        if (mipmap.Width < 1 || mipmap.Height < 1)
                         {
-                            data[ii] = mipmap.Data[0, 0, ii];
+                            continue;
                         }
-                        GL.CompressedTextureSubImage2D(oglTexture, i, 0, 0, mipmap.Width, mipmap.Height, (PixelFormat)All.CompressedRgbS3tcDxt1Ext, data.Length, data);
+                        GL.CompressedTextureSubImage2D(oglTexture, i, 0, 0, mipmap.Width, mipmap.Height, (PixelFormat)All.CompressedRgbS3tcDxt1Ext, slice.Data.Length, slice.Data);
+                        if (GL.GetError() != ErrorCode.NoError)
+                        {
+                            //throw new Exception();
+                        }
                     }
                     /*var _mipmap = texture.Mipmaps[0];
                     var _data = new byte[_mipmap.Data.GetLength(2)];
@@ -97,20 +110,6 @@ namespace CsgoDemoRenderer
                         GL.CompressedTexSubImage2D(TextureTarget.Texture2D, i, 0, 0, mipmap.Width, mipmap.Height, PixelFormat.Rgb, data.Length, data);
                     }*/
                 }
-                else if (texture.Mipmaps[0].Format == Vtf.ImageFormat.Rgba8888)
-                {
-                    GL.TextureStorage2D(oglTexture, part.Texture.Mipmaps.Length, SizedInternalFormat.Rgba8, part.Texture.Mipmaps[0].Width, part.Texture.Mipmaps[0].Height);
-                    for (var i = 0; i < texture.Mipmaps.Length; i++)
-                    {
-                        var mipmap = texture.Mipmaps[i];
-                        var data = new byte[mipmap.Data.GetLength(2)];
-                        for (var ii = 0; ii < data.Length; ii++)
-                        {
-                            data[ii] = mipmap.Data[0, 0, ii];
-                        }
-                        GL.CompressedTextureSubImage2D(oglTexture, i, 0, 0, mipmap.Width, mipmap.Height, PixelFormat.Rgba, data.Length, data);
-                    }
-                }
                 else
                 {
                     Console.WriteLine($"Unsupported format: {texture.Mipmaps[0].Format}");
@@ -125,9 +124,15 @@ namespace CsgoDemoRenderer
             program = GL.CreateProgram();
             var vertexShader = GL.CreateShader(ShaderType.VertexShader);
             GL.ShaderSource(vertexShader, File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Shader", "basic.vertex.glsl")));
+            GL.CompileShader(vertexShader);
+            var vertexLog = GL.GetShaderInfoLog(vertexShader);
+            Console.WriteLine(vertexLog);
             GL.AttachShader(program, vertexShader);
             var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
             GL.ShaderSource(fragmentShader, File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Shader", "basic.fragment.glsl")));
+            GL.CompileShader(fragmentShader);
+            var fragmentLog = GL.GetShaderInfoLog(fragmentShader);
+            Console.WriteLine(fragmentLog);
             GL.AttachShader(program, fragmentShader);
             GL.LinkProgram(program);
             GL.ValidateProgram(program);
@@ -150,6 +155,8 @@ namespace CsgoDemoRenderer
             GL.VertexArrayAttribBinding(bspVao, 1, 0);
             GL.EnableVertexArrayAttrib(bspVao, 2);
             GL.VertexArrayAttribFormat(bspVao, 2, 2, VertexAttribType.Float, false, 24);
+            GL.VertexArrayAttribBinding(bspVao, 2, 0);
+            GL.VertexArrayAttribFormat(bspVao, 3, 2, VertexAttribType.Float, false, 32);
             GL.VertexArrayAttribBinding(bspVao, 2, 0);
             GL.VertexArrayVertexBuffer(bspVao, 0, bspBuffer, IntPtr.Zero, Marshal.SizeOf<Vertex>());
             GL.VertexArrayElementBuffer(bspVao, bspIndexBuffer);

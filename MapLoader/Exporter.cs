@@ -28,7 +28,7 @@ namespace CsgoDemoRenderer.MapLoader
             }
             writer.Close();
 
-            foreach (var p in map.Parts)
+            /*foreach (var p in map.Parts)
             {
                 var t = p.Texture;
                 var mip = t?.Mipmaps[0];
@@ -40,7 +40,7 @@ namespace CsgoDemoRenderer.MapLoader
                         data[i] = mip.Value.Data[0, 0, i];
                     }
                 }
-            }
+            }*/
         }
 
         private static Vertex TransformVertexForExport(Vertex vertex)

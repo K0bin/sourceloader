@@ -13,6 +13,7 @@ namespace CsgoDemoRenderer.MapLoader
         public Vector3 Position;
         public Vector3 Normal;
         public Vector2 TextureCoord;
+        public Vector2 LightmapTextureCoord;
 
         public static Vertex Read(Map map)
         {

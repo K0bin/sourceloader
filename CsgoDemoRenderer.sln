@@ -15,10 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util", "Util\Util.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapRendererD3D", "MapRendererD3D\MapRendererD3D.csproj", "{DDC356BB-5184-4383-92FE-5115EBB23A05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapRendererBGFX", "MapRendererBGFX\MapRendererBGFX.csproj", "{89F29BFC-6209-4A42-A4F2-161AA0660F50}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpBgfx", "SharpBgfx\SharpBgfx.csproj", "{C1B19140-36CD-415A-BF45-F1F019F17302}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,14 +45,6 @@ Global
 		{DDC356BB-5184-4383-92FE-5115EBB23A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDC356BB-5184-4383-92FE-5115EBB23A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDC356BB-5184-4383-92FE-5115EBB23A05}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89F29BFC-6209-4A42-A4F2-161AA0660F50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89F29BFC-6209-4A42-A4F2-161AA0660F50}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89F29BFC-6209-4A42-A4F2-161AA0660F50}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89F29BFC-6209-4A42-A4F2-161AA0660F50}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1B19140-36CD-415A-BF45-F1F019F17302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1B19140-36CD-415A-BF45-F1F019F17302}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1B19140-36CD-415A-BF45-F1F019F17302}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1B19140-36CD-415A-BF45-F1F019F17302}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

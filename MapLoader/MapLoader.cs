@@ -188,7 +188,11 @@ namespace CsgoDemoRenderer.MapLoader
                                 X = (texInfo.TextureVecs[0] * vertex.Position.X + texInfo.TextureVecs[1] * vertex.Position.Y + texInfo.TextureVecs[2] * vertex.Position.Z + texInfo.TextureVecs[3]) / (texData.Width * 1.0f),
                                 Y = (texInfo.TextureVecs[4] * vertex.Position.X + texInfo.TextureVecs[5] * vertex.Position.Y + texInfo.TextureVecs[6] * vertex.Position.Z + texInfo.TextureVecs[7]) / (texData.Height * 1.0f),
                             };
-
+                            vertex.LightmapTextureCoord = new Vector2
+                            {
+                                X = (texInfo.LightmapVecs[0] * vertex.Position.X + texInfo.LightmapVecs[1] * vertex.Position.Y + texInfo.LightmapVecs[2] * vertex.Position.Z + texInfo.LightmapVecs[3]) / (texData.Width * 1.0f),
+                                Y = (texInfo.LightmapVecs[4] * vertex.Position.X + texInfo.LightmapVecs[5] * vertex.Position.Y + texInfo.LightmapVecs[6] * vertex.Position.Z + texInfo.LightmapVecs[7]) / (texData.Height * 1.0f),
+                            };
                             faceVertices.Add(edge.VertexIndex[i], (uint)vertices.Count);
                             vertices.Add(vertex);
                         }
