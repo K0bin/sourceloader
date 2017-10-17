@@ -20,5 +20,7 @@ namespace CsgoDemoRenderer.Bsp.LumpData
             if (reader == null) { return; }
             Elements = reader.ReadStructureArray<T>(length);
         }
+
+        public override string ToString() => $"{typeof(T).ToString()}[{Elements.Length}";
     }
 }

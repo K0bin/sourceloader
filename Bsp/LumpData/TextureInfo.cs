@@ -9,9 +9,9 @@ namespace CsgoDemoRenderer.Bsp.LumpData
     public struct TextureInfo
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public float[,] TextureVecs;
+        public float[] TextureVecs;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public float[,] LightmapVecs;
+        public float[] LightmapVecs;
         public int Flags;
         public int TextureData;
     }

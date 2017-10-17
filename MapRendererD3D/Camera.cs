@@ -1,11 +1,16 @@
-﻿using OpenTK.Input;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using SharpDX.DirectInput;
 
 namespace CsgoDemoRenderer
 {
+    struct MouseState
+    {
+        public int X;
+        public int Y;
+    }
     class Player
     {
         public Camera camera;
@@ -28,6 +33,11 @@ namespace CsgoDemoRenderer
 
         //Input 
         MouseState oldState;
+        MouseState currentState;
+
+        private DirectInput directInput;
+        private Mouse mouse;
+        private Keyboard keyboard;
 
         public Player(Vector3 _position, Vector3 _rotation, float fov, int width, int height)
         {
@@ -38,11 +48,15 @@ namespace CsgoDemoRenderer
 
         void Initialize(float fov, int width, int height)
         {
-            oldState = Mouse.GetState();
+            directInput = new DirectInput();
+            mouse = new Mouse(directInput);
+            mouse.Acquire();
+            keyboard = new Keyboard(directInput);
+            keyboard.Acquire();
             camera = new Camera(fov, width, height);
         }
 
-        public void Update(float delta, bool hasFocus, Dictionary<Key, bool> isKeyDown)
+        public void Update(float delta, bool hasFocus)
         {
             // rotation.Z: Kamera nach rechts/links kippen
             // rotation.X: hoch/runter schauen
@@ -51,8 +65,22 @@ namespace CsgoDemoRenderer
             //Mouse.SetPosition(128, 128);
             if (hasFocus)
             {
+                oldState = currentState;
+                currentState = new CsgoDemoRenderer.MouseState()
+                {
+                    X = mouse.GetCurrentState().X,
+                    Y = mouse.GetCurrentState().Y
+                };
+                var isKeyDown = new Dictionary<Key, bool>();
+                var keyboardState = keyboard.GetCurrentState();
+                foreach (var key in keyboardState.AllKeys)
+                {
+                    isKeyDown[key] = keyboardState.IsPressed(key);
+                }
+
                 #region Mouse
-                Vector2 deltaState = new Vector2((Mouse.GetState().X - oldState.X) * rotationSpeed * delta, (Mouse.GetState().Y - oldState.Y) * rotationSpeed * delta);
+                Vector2 deltaState = new Vector2((currentState.X - oldState.X) * rotationSpeed * delta, (currentState.Y - oldState.Y) * rotationSpeed * delta);
+                deltaState *= 10;
 
                 rotation.X -= deltaState.Y * 2;
                 rotation.Y -= deltaState.X * 2;
@@ -67,11 +95,10 @@ namespace CsgoDemoRenderer
                     rotation.X = minYaw;
                 }
 
-                Matrix4x4 rotationMat = Matrix4x4.CreateRotationX((float)OpenTK.MathHelper.DegreesToRadians(rotation.X)) * Matrix4x4.CreateRotationY((float)OpenTK.MathHelper.DegreesToRadians(rotation.Y)) * Matrix4x4.CreateRotationZ((float)OpenTK.MathHelper.DegreesToRadians(rotation.Z));
+                Matrix4x4 rotationMat = Matrix4x4.CreateRotationX(DegreesToRadians(rotation.X)) * Matrix4x4.CreateRotationY(DegreesToRadians(rotation.Y)) * Matrix4x4.CreateRotationZ(DegreesToRadians(rotation.Z));
                 #endregion
 
                 #region Keyboard
-                KeyboardState keyboard = Keyboard.GetState();
                 var wDown = isKeyDown.ContainsKey(Key.W) && isKeyDown[Key.W];
                 var aDown = isKeyDown.ContainsKey(Key.A) && isKeyDown[Key.A];
                 var sDown = isKeyDown.ContainsKey(Key.S) && isKeyDown[Key.S];
@@ -82,8 +109,8 @@ namespace CsgoDemoRenderer
                 {
                     float angle = rotation.Y;
                     float hypothenuse = (float)(movementSpeed * 0.1f);
-                    float adjacent = (float)(hypothenuse * (float)Math.Cos(OpenTK.MathHelper.DegreesToRadians(angle)));
-                    float opposite = (float)(Math.Sin(OpenTK.MathHelper.DegreesToRadians(angle)) * hypothenuse);
+                    float adjacent = (float)(hypothenuse * (float)Math.Cos(DegreesToRadians(angle)));
+                    float opposite = (float)(Math.Sin(DegreesToRadians(angle)) * hypothenuse);
                     speed.Z -= adjacent;
                     speed.X -= opposite;
                 }
@@ -91,8 +118,8 @@ namespace CsgoDemoRenderer
                 {
                     float angle = rotation.Y + 45;
                     float hypothenuse = (float)(movementSpeed * 0.1f);
-                    float adjacent = (float)(hypothenuse * (float)Math.Cos(OpenTK.MathHelper.DegreesToRadians(angle)));
-                    float opposite = (float)(Math.Sin(OpenTK.MathHelper.DegreesToRadians(angle)) * hypothenuse);
+                    float adjacent = (float)(hypothenuse * (float)Math.Cos(DegreesToRadians(angle)));
+                    float opposite = (float)(Math.Sin(DegreesToRadians(angle)) * hypothenuse);
                     speed.Z -= adjacent;
                     speed.X -= opposite;
                 }
@@ -100,8 +127,8 @@ namespace CsgoDemoRenderer
                 {
                     float angle = rotation.Y - 45;
                     float hypothenuse = (float)(movementSpeed * 0.1f);
-                    float adjacent = (float)(hypothenuse * (float)Math.Cos(OpenTK.MathHelper.DegreesToRadians(angle)));
-                    float opposite = (float)(Math.Sin(OpenTK.MathHelper.DegreesToRadians(angle)) * hypothenuse);
+                    float adjacent = (float)(hypothenuse * (float)Math.Cos(DegreesToRadians(angle)));
+                    float opposite = (float)(Math.Sin(DegreesToRadians(angle)) * hypothenuse);
                     speed.Z -= adjacent;
                     speed.X -= opposite;
                 }
@@ -111,8 +138,8 @@ namespace CsgoDemoRenderer
                 {
                     float angle = (float)(rotation.Y + 180);
                     float hypothenuse = (float)(movementSpeed * 0.1f);
-                    float adjacent = (float)(hypothenuse * (float)Math.Cos(OpenTK.MathHelper.DegreesToRadians(angle)));
-                    float opposite = (float)(Math.Sin(OpenTK.MathHelper.DegreesToRadians(angle)) * hypothenuse);
+                    float adjacent = (float)(hypothenuse * (float)Math.Cos(DegreesToRadians(angle)));
+                    float opposite = (float)(Math.Sin(DegreesToRadians(angle)) * hypothenuse);
                     speed.Z -= adjacent;
                     speed.X -= opposite;
                 }
@@ -120,8 +147,8 @@ namespace CsgoDemoRenderer
                 {
                     float angle = rotation.Y + 225;
                     float hypothenuse = (float)(movementSpeed * 0.1f);
-                    float adjacent = (float)(hypothenuse * (float)Math.Cos(OpenTK.MathHelper.DegreesToRadians(angle)));
-                    float opposite = (float)(Math.Sin(OpenTK.MathHelper.DegreesToRadians(angle)) * hypothenuse);
+                    float adjacent = (float)(hypothenuse * (float)Math.Cos(DegreesToRadians(angle)));
+                    float opposite = (float)(Math.Sin(DegreesToRadians(angle)) * hypothenuse);
                     speed.Z -= adjacent;
                     speed.X -= opposite;
                 }
@@ -129,8 +156,8 @@ namespace CsgoDemoRenderer
                 {
                     float angle = rotation.Y + 135;
                     float hypothenuse = (float)(movementSpeed * 0.1f);
-                    float adjacent = (float)(hypothenuse * (float)Math.Cos(OpenTK.MathHelper.DegreesToRadians(angle)));
-                    float opposite = (float)(Math.Sin(OpenTK.MathHelper.DegreesToRadians(angle)) * hypothenuse);
+                    float adjacent = (float)(hypothenuse * (float)Math.Cos(DegreesToRadians(angle)));
+                    float opposite = (float)(Math.Sin(DegreesToRadians(angle)) * hypothenuse);
                     speed.Z -= adjacent;
                     speed.X -= opposite;
                 }
@@ -140,8 +167,8 @@ namespace CsgoDemoRenderer
                 {
                     float angle = rotation.Y - 90;
                     float hypothenuse = (float)(movementSpeed * 0.1f);
-                    float adjacent = (float)(hypothenuse * (float)Math.Cos(OpenTK.MathHelper.DegreesToRadians(angle)));
-                    float opposite = (float)(Math.Sin(OpenTK.MathHelper.DegreesToRadians(angle)) * hypothenuse);
+                    float adjacent = (float)(hypothenuse * (float)Math.Cos(DegreesToRadians(angle)));
+                    float opposite = (float)(Math.Sin(DegreesToRadians(angle)) * hypothenuse);
                     speed.Z -= adjacent;
                     speed.X -= opposite;
                 }
@@ -149,8 +176,8 @@ namespace CsgoDemoRenderer
                 {
                     float angle = rotation.Y + 90;
                     float hypothenuse = (float)(movementSpeed * 0.1f);
-                    float adjacent = (float)(hypothenuse * (float)Math.Cos(OpenTK.MathHelper.DegreesToRadians(angle)));
-                    float opposite = (float)(Math.Sin(OpenTK.MathHelper.DegreesToRadians(angle)) * hypothenuse);
+                    float adjacent = (float)(hypothenuse * (float)Math.Cos(DegreesToRadians(angle)));
+                    float opposite = (float)(Math.Sin(DegreesToRadians(angle)) * hypothenuse);
                     speed.Z -= adjacent;
                     speed.X -= opposite;
                 }
@@ -164,11 +191,11 @@ namespace CsgoDemoRenderer
                     position.Y -= movementSpeed * delta * 0.1f;
                 }
 
-                if (isKeyDown.ContainsKey(Key.ShiftLeft) && isKeyDown[Key.ShiftLeft])
+                if (isKeyDown.ContainsKey(Key.LeftShift) && isKeyDown[Key.LeftShift])
                 {
                     movementSpeed = runningSpeed;
                 }
-                else if (isKeyDown.ContainsKey(Key.ControlLeft) && isKeyDown[Key.ControlLeft])
+                else if (isKeyDown.ContainsKey(Key.LeftControl) && isKeyDown[Key.LeftControl])
                 {
                     movementSpeed = crouchingSpeed;
                 }
@@ -181,12 +208,13 @@ namespace CsgoDemoRenderer
                 target = Vector3.Transform(new Vector3(0, 0, -1), rotationMat) + position;
                 speed = Vector4.Zero;
                 #endregion
-
-                camera.Update(position, target);
-
-                oldState = Mouse.GetState();
             }
             camera.Update(position, target);
+        }
+
+        private float DegreesToRadians(float degree)
+        {
+            return (float)((Math.PI / 180) * degree);
         }
     }
 
@@ -211,8 +239,7 @@ namespace CsgoDemoRenderer
 
         public Camera(float fov, int width, int height)
         {
-            projection = Matrix4x4.CreatePerspectiveFieldOfView(fov, (float)width / (float)height, 0.01f, 100f);
-            //projection = Matrix4x4.CreatePerspectiveFieldOfView(fov, height / width, 0.01f, 100f);
+            projection = Matrix4x4.CreatePerspectiveFieldOfView(fov, (float)width / (float)height, zNear, zFar);
         }
 
         public void Update(Vector3 _position, Vector3 target)
@@ -220,7 +247,7 @@ namespace CsgoDemoRenderer
             this.target = target;
             Position = _position;
             View = Matrix4x4.CreateLookAt(Position, target, new Vector3(0, 1, 0));
-            ViewProjection = Matrix4x4.CreateRotationX(-1.57f) * Matrix4x4.CreateScale(0.01f) * View * projection;
+            ViewProjection = View * projection;
         }
     }
 }

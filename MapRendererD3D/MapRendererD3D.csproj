@@ -3,32 +3,26 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-	<RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
+    <RootNamespace>CsgoDemoRenderer.MapRendererD3D</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenTK.NETCore" Version="1.1.2749.6433" />
+    <PackageReference Include="SharpDX.D3DCompiler" Version="4.1.0-ci184" />
+    <PackageReference Include="SharpDX.Desktop" Version="4.1.0-ci184" />
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.1.0-ci184" />
+    <PackageReference Include="SharpDX.DirectInput" Version="4.1.0-ci184" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.4.0" />
-    <PackageReference Include="ValvePak" Version="0.4.0.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Bsp\Bsp.csproj" />
     <ProjectReference Include="..\MapLoader\MapLoader.csproj" />
+    <ProjectReference Include="..\Util\Util.csproj" />
     <ProjectReference Include="..\Vtf\Vtf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Distroir.BSP">
-      <HintPath>..\Distroir.BSP.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Shader\basic.fragment.glsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shader\basic.vertex.glsl">
+    <None Update="Shader\BaseShader.hlsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -44,6 +44,8 @@ namespace CsgoDemoRenderer.Bsp
 
         public LumpData.LumpData Data;
 
+        public override string ToString() => $"Lump {Data?.ToString() ?? ""}".Trim();
+
         public static Lump Read(BinaryReader reader, LumpType offset)
         {
             var lump = new Lump();
@@ -103,6 +105,15 @@ namespace CsgoDemoRenderer.Bsp
                     break;
                 case LumpType.TextureDataStringTable:
                     lump.Data = new ArrayLumpData<int>(reader, lump.FileLength);
+                    break;
+                case LumpType.DisplacementVertices:
+                    lump.Data = new ArrayLumpData<DisplacementVertex>(reader, lump.FileLength);
+                    break;
+                case LumpType.DisplacementTriangles:
+                    lump.Data = new ArrayLumpData<DisplacementTriangle>(reader, lump.FileLength);
+                    break;
+                case LumpType.DisplacementInfo:
+                    lump.Data = new ArrayLumpData<DisplacementInfo>(reader, lump.FileLength);
                     break;
             }
             reader.BaseStream.Position = position;

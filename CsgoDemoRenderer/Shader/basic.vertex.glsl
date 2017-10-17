@@ -11,9 +11,11 @@ uniform vec3 cameraPos;
 
 out vec4 _position;
 out vec4 _normal;
+out vec2 _texCoord;
 
 void main(void) {
 	_position = vec4(position, 1.0);
 	_normal = vec4(normal, 1.0);
+	_texCoord = texCoord;
 	gl_Position = mvp * vec4(position, 1.0);
 }

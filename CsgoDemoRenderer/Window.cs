@@ -5,7 +5,7 @@ using OpenTK;
 using OpenTK.Platform;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
-using Bsp;
+using CsgoDemoRenderer.Bsp;
 using System.IO;
 using OpenTK.Input;
 
@@ -18,9 +18,9 @@ namespace CsgoDemoRenderer
         private Player player;
         private Dictionary<Key, bool> isKeyDown = new Dictionary<Key, bool>();
         public Window()
-            : base(1280, 720, GraphicsMode.Default, "CS Renderer", GameWindowFlags.Default, DisplayDevice.Default, 4, 5, GraphicsContextFlags.ForwardCompatible)
+            : base(1280, 720, GraphicsMode.Default, "CS Renderer", GameWindowFlags.Default, DisplayDevice.Default, 4, 5, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug)
         {
-            var reader = new BinaryReader(new FileStream(@"C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\csgo\maps\de_overpass.bsp", FileMode.Open));
+            var reader = new BinaryReader(new FileStream(@"C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\csgo\maps\aim_redline.bsp", FileMode.Open));
             //var reader = new BinaryReader(new FileStream(@"D:\testmap.bsp", FileMode.Open));
             map = Map.Load(reader);
             renderer = new MapRenderer(map);

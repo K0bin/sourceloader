@@ -1,10 +1,11 @@
-﻿using System;
+﻿using CsgoDemoRenderer.Bsp;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CsgoDemoRenderer
+namespace CsgoDemoRenderer.MapLoader
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct Vertex
@@ -12,5 +13,10 @@ namespace CsgoDemoRenderer
         public Vector3 Position;
         public Vector3 Normal;
         public Vector2 TextureCoord;
+
+        public static Vertex Read(Map map)
+        {
+            return new Vertex();
+        }
     }
 }
