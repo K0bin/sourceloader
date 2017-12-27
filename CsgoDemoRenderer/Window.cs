@@ -20,7 +20,7 @@ namespace CsgoDemoRenderer
         public Window()
             : base(1280, 720, GraphicsMode.Default, "CS Renderer", GameWindowFlags.Default, DisplayDevice.Default, 4, 5, GraphicsContextFlags.ForwardCompatible | GraphicsContextFlags.Debug)
         {
-            var reader = new BinaryReader(new FileStream(@"C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\csgo\maps\aim_redline.bsp", FileMode.Open));
+            var reader = new BinaryReader(new FileStream(@"D:\Games\Steam\steamapps\common\Counter-Strike Global Offensive\csgo\maps\de_cache.bsp", FileMode.Open));
             //var reader = new BinaryReader(new FileStream(@"C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\csgo\maps\de_overpass.bsp", FileMode.Open));
             //var reader = new BinaryReader(new FileStream(@"D:\testmap.bsp", FileMode.Open));
             map = Map.Load(reader);

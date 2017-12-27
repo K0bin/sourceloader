@@ -30,7 +30,7 @@ namespace CsgoDemoRenderer
         public MapRenderer(Map map)
         {
             this.map = map;
-            this.parser = new MapLoader.MapLoader(map, @"C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive");
+            this.parser = new MapLoader.MapLoader(map, @"D:\Games\Steam\steamapps\common\Counter-Strike Global Offensive");
             parser.Load();
             parser.Export("Export");
         }
@@ -80,12 +80,12 @@ namespace CsgoDemoRenderer
                     for (var i = 0; i < texture.Mipmaps.Length; i++)
                     {
                         var mipmap = texture.Mipmaps[i];
-                        var slice = mipmap.Frames.First().Faces.First().Slices.First();
-                        if (mipmap.Width < 1 || mipmap.Height < 1)
+                        var slice = mipmap.Frames?.FirstOrDefault().Faces?.FirstOrDefault().Slices?.FirstOrDefault();
+                        if (slice == null || mipmap.Width < 1 || mipmap.Height < 1)
                         {
                             continue;
                         }
-                        GL.CompressedTextureSubImage2D(oglTexture, i, 0, 0, mipmap.Width, mipmap.Height, (PixelFormat)All.CompressedRgbS3tcDxt1Ext, slice.Data.Length, slice.Data);
+                        GL.CompressedTextureSubImage2D(oglTexture, i, 0, 0, mipmap.Width, mipmap.Height, (PixelFormat)All.CompressedRgbS3tcDxt1Ext, slice.Value.Data.Length, slice.Value.Data);
                         if (GL.GetError() != ErrorCode.NoError)
                         {
                             //throw new Exception();

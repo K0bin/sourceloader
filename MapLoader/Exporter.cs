@@ -10,7 +10,7 @@ namespace CsgoDemoRenderer.MapLoader
     {
         public static void Export(this MapLoader map, string path)
         {
-            StreamWriter writer = new StreamWriter(Path.Combine(path, "map.obj"));
+            StreamWriter writer = File.CreateText(Path.Combine(path, "map.obj"));
             foreach (var v in map.Vertices)
             {
                 var _v = TransformVertexForExport(v);
