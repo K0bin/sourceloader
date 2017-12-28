@@ -162,8 +162,8 @@ namespace CsgoDemoRenderer.MapLoader
                             vertex.Position = bspVertices[rootVertex];
                             vertex.TextureCoord = new Vector2
                             {
-                                X = (Vector3.Dot(vertex.Position, texInfo.TextureVecsS.Xyz()) + texInfo.TextureVecsS.W) / texData.Width,
-                                Y = (Vector3.Dot(vertex.Position, texInfo.TextureVecsT.Xyz()) + texInfo.TextureVecsT.W) / texData.Height,
+                                X = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsS) / (float)texData.Width,
+                                Y = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsT) / (float)texData.Height,
                             };
                             faceVertices.Add(rootVertex, (uint)vertices.Count);
                             vertices.Add(vertex);
@@ -183,14 +183,12 @@ namespace CsgoDemoRenderer.MapLoader
                         {
                             var vertex = new Vertex();
                             vertex.Position = bspVertices[edge.VertexIndex[i]];
-                            vertex.Normal = Vector3.Normalize(Vector3.Cross(bspVertices[rootVertex] - bspVertices[edge.VertexIndex[edgeIndex > 0 ? 0 : 1]], bspVertices[rootVertex] - bspVertices[edge.VertexIndex[edgeIndex > 0 ? 1 : 0]]));
+                            //vertex.Normal = Vector3.Normalize(Vector3.Cross(bspVertices[rootVertex] - bspVertices[edge.VertexIndex[edgeIndex > 0 ? 0 : 1]], bspVertices[rootVertex] - bspVertices[edge.VertexIndex[edgeIndex > 0 ? 1 : 0]]));
                             vertex.TextureCoord = new Vector2
                             {
-                                //X = (texInfo.TextureVecs[0] * vertex.Position.X + texInfo.TextureVecs[1] * vertex.Position.Y + texInfo.TextureVecs[2] * vertex.Position.Z + texInfo.TextureVecs[3]) / (texData.Width * 1.0f),
-                                X = (Vector3.Dot(vertex.Position, texInfo.TextureVecsS.Xyz()) + texInfo.TextureVecsS.W) / texData.Width,
-                                Y = (Vector3.Dot(vertex.Position, texInfo.TextureVecsT.Xyz()) + texInfo.TextureVecsT.W) / texData.Height,
-                            //Y = (texInfo.TextureVecs[4] * vertex.Position.X + texInfo.TextureVecs[5] * vertex.Position.Y + texInfo.TextureVecs[6] * vertex.Position.Z + texInfo.TextureVecs[7]) / (texData.Height * 1.0f),
-                        };
+                                X = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsS) / (float)texData.Width,
+                                Y = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsT) / (float)texData.Height,
+                            };
                             vertex.LightmapTextureCoord = new Vector2
                             {
                                 X = (Vector3.Dot(vertex.Position, texInfo.LightmapVecsS.Xyz()) + texInfo.LightmapVecsS.W) / texData.Width,

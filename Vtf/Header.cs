@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace CsgoDemoRenderer.Vtf
 {
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 80)]
     internal struct Header
     {
         internal static int ExpectedSignature = 0x00465456;
@@ -36,8 +37,38 @@ namespace CsgoDemoRenderer.Vtf
                                 // Must be a power of 2. Can be 0 or 1 for a 2D texture (v7.2 only).
 
         // 7.3+
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         internal byte[] Padding2;      // depth padding (4 byte alignment).
         internal uint NumResources;		// Number of resources this vtf has
+
+        public static Header Read(BinaryReader reader)
+        {
+            Header header = new Header();
+            header.Signature = reader.ReadInt32();
+            header.Version = new uint[] { reader.ReadUInt32(), reader.ReadUInt32() };
+            header.HeaderSize = reader.ReadUInt32();
+            header.Width = reader.ReadUInt16();
+            header.Height = reader.ReadUInt16();
+            header.Flags = (TextureFlags)reader.ReadInt32();
+            header.Frames = reader.ReadUInt16();
+            header.FirstFrame = reader.ReadUInt16();
+            header.Padding0 = reader.ReadBytes(4);
+            header.Reflectivity = new float[] { reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle() };
+            header.Padding1 = reader.ReadBytes(4);
+            header.BumpmapScale = reader.ReadSingle();
+            header.HighResImageFormat = (ImageFormat)reader.ReadUInt32();
+            header.MipmapCount = reader.ReadByte();
+            header.LowResImageFormat = (ImageFormat)reader.ReadUInt32();
+            header.LowResImageWidth = reader.ReadByte();
+            header.LowResImageHeight = reader.ReadByte();
+
+            if (header.Version[0] >= 7 && header.Version[1] >= 2) header.Depth = reader.ReadUInt16();
+            if (header.Version[0] >= 7 && header.Version[1] >= 3)
+            {
+                header.Padding2 = reader.ReadBytes(3);
+                header.NumResources = reader.ReadUInt32();
+            }
+            return header;
+        }
     }
 }

@@ -52,27 +52,22 @@ namespace CsgoDemoRenderer.Vtf
         public Texture(BinaryReader reader, int length)
         {
             var startPosition = reader.BaseStream.Position;
-            reader.BaseStream.Position = startPosition + 12;
-            var size = reader.ReadUInt32();
-            reader.BaseStream.Position = startPosition;
-            header = reader.ReadStructure<Header>((int)size);
-
-            if (header.Version[1] >= 3)
+            header = reader.ReadStructure<Header>();
+            //var testHeader = reader.ReadStructure<Header>();
+            //reader.BaseStream.Position = startPosition;
+            //header = Header.Read(reader);
+            if (header.Signature != Header.ExpectedSignature)
             {
-                reader.ReadBytes(8 * (int)header.NumResources);
+                throw new Exception("VTF signature doesn't match.");
             }
+            reader.BaseStream.Position = header.HeaderSize;
 
             var lowResInfo = header.LowResImageFormat.GetInfo();
             var hasLowRes = header.LowResImageWidth != 0 && header.LowResImageHeight != 0 && lowResInfo != null && lowResInfo.HasValue;
-            Mipmaps = new MipMap[header.MipmapCount + (hasLowRes ? 1 : 0)];
+            Mipmaps = new MipMap[header.MipmapCount];
             if (hasLowRes)
             {
                 var data = reader.ReadBytes(header.LowResImageWidth * header.LowResImageHeight * lowResInfo.Value.TotalBits / 8);
-                var mipData = new byte[1, 1, data.Length];
-                for (var dI = 0; dI < data.Length; dI++)
-                {
-                    mipData[0, 0, dI] = data[dI];
-                }
                 Thumbnail = new Thumbnail
                 {
                     Data = data,
@@ -84,12 +79,17 @@ namespace CsgoDemoRenderer.Vtf
             }
 
             //OTHER RESOURCE DATA
+            if (header.Version[0] >= 7 && header.Version[1] >= 3)
+            {
+                reader.ReadBytes((int)header.NumResources * 8);
+            }
 
             var info = header.HighResImageFormat.GetInfo().Value;
+            //for (var mip = header.MipmapCount - 1; mip >= 0; mip--)
             for (var mip = 0; mip < header.MipmapCount; mip++)
             {
-                var width = Math.Max((int)(header.Width / Math.Pow(2, mip)), 4);
-                var height = Math.Max((int)(header.Height / Math.Pow(2, mip)), 4);
+                var width = (int)(header.Width / Math.Pow(2, mip));
+                var height = (int)(header.Height / Math.Pow(2, mip));
                 var mipSize = width * height * info.TotalBits / 8;
                 var frames = new Frame[header.Frames];
                 for (var frame = header.FirstFrame; frame < header.Frames; frame++)
