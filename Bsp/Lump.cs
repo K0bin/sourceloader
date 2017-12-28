@@ -117,6 +117,12 @@ namespace CsgoDemoRenderer.Bsp
                 case LumpType.DisplacementInfo:
                     lump.Data = new ArrayLumpData<DisplacementInfo>(reader, lump.FileLength);
                     break;
+                case LumpType.VertexNormals:
+                    lump.Data = new ArrayLumpData<Vector3>(reader, lump.FileLength);
+                    break;
+                case LumpType.VertexNormalIndices:
+                    lump.Data = new ArrayLumpData<uint>(reader, lump.FileLength);
+                    break;
             }
             reader.BaseStream.Position = position;
             return lump;

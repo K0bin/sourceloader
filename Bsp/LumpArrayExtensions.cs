@@ -64,5 +64,13 @@ namespace CsgoDemoRenderer.Bsp
         {
             return (lumps[(int)LumpType.TextureDataStringTable].Data as ArrayLumpData<int>)?.Elements;
         }
+        public static uint[] GetVertexNormalIndices(this Lump[] lumps)
+        {
+            return (lumps[(int)LumpType.VertexNormalIndices].Data as ArrayLumpData<uint>)?.Elements;
+        }
+        public static Vector3[] GetVertexNormals(this Lump[] lumps)
+        {
+            return (lumps[(int)LumpType.VertexNormals].Data as ArrayLumpData<Vector3>)?.Elements;
+        }
     }
 }
