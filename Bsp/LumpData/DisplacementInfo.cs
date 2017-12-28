@@ -6,6 +6,7 @@ using System.Text;
 
 namespace CsgoDemoRenderer.Bsp.LumpData
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct DisplacementInfo
     {
         public Vector3 StartPosition;

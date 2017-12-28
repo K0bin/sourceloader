@@ -6,6 +6,7 @@ using System.Text;
 
 namespace CsgoDemoRenderer.Bsp.LumpData
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 56)]
     public struct Face
     {
         public ushort PlaneNumber;

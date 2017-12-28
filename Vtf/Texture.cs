@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -51,75 +52,59 @@ namespace CsgoDemoRenderer.Vtf
         }
         public Texture(BinaryReader reader, int length)
         {
-            var startPosition = reader.BaseStream.Position;
-            header = reader.ReadStructure<Header>();
-            //var testHeader = reader.ReadStructure<Header>();
-            //reader.BaseStream.Position = startPosition;
-            //header = Header.Read(reader);
-            if (header.Signature != Header.ExpectedSignature)
+            header = Header.Read(reader);
+            var resourceDictionary = header.BuildResourceDictionary(reader);
+            
+            if (resourceDictionary.TryGetValue(Resources.Thumbnail, out int thumbnailOffset))
             {
-                throw new Exception("VTF signature doesn't match.");
-            }
-            reader.BaseStream.Position = header.HeaderSize;
-
-            var lowResInfo = header.LowResImageFormat.GetInfo();
-            var hasLowRes = header.LowResImageWidth != 0 && header.LowResImageHeight != 0 && lowResInfo != null && lowResInfo.HasValue;
-            Mipmaps = new MipMap[header.MipmapCount];
-            if (hasLowRes)
-            {
-                var data = reader.ReadBytes(header.LowResImageWidth * header.LowResImageHeight * lowResInfo.Value.TotalBits / 8);
+                reader.BaseStream.Position = thumbnailOffset;
+                var thumbnailFormatInfo = header.LowResImageFormat.GetInfo();
+                var data = reader.ReadBytes(header.LowResImageWidth * header.LowResImageHeight * thumbnailFormatInfo.Value.TotalBits / 8);
                 Thumbnail = new Thumbnail
                 {
                     Data = data,
                     Format = header.LowResImageFormat,
-                    Info = lowResInfo.Value,
+                    Info = thumbnailFormatInfo.Value,
                     Width = header.LowResImageWidth,
                     Height = header.LowResImageHeight
                 };
             }
 
-            //OTHER RESOURCE DATA
-            if (header.Version[0] >= 7 && header.Version[1] >= 3)
+            if (resourceDictionary.TryGetValue(Resources.Image, out int imageOffset))
             {
-                reader.ReadBytes((int)header.NumResources * 8);
-            }
-
-            var info = header.HighResImageFormat.GetInfo().Value;
-            //for (var mip = header.MipmapCount - 1; mip >= 0; mip--)
-            for (var mip = 0; mip < header.MipmapCount; mip++)
-            {
-                var width = (int)(header.Width / Math.Pow(2, mip));
-                var height = (int)(header.Height / Math.Pow(2, mip));
-                var mipSize = width * height * info.TotalBits / 8;
-                var frames = new Frame[header.Frames];
-                for (var frame = header.FirstFrame; frame < header.Frames; frame++)
+                reader.BaseStream.Position = imageOffset;
+                var info = header.HighResImageFormat.GetInfo().Value;
+                Mipmaps = new MipMap[header.MipmapCount];
+                for (var mip = 0; mip < header.MipmapCount; mip++)
                 {
-                    frames[frame] = new Frame();
-                    var faces = new Face[1];
-                    for (var face = 0; face < 1; face++)
+                    var width = (int)(header.Width / Math.Pow(2, mip));
+                    var height = (int)(header.Height / Math.Pow(2, mip));
+                    var mipSize = width * height * info.TotalBits / 8;
+                    var frames = new Frame[header.Frames];
+                    for (var frame = header.FirstFrame; frame < header.Frames; frame++)
                     {
-                        var slices = new Slice[Math.Max((int)header.Depth, 1)];
-                        for (var slice = 0; slice < slices.Length; slice++)
+                        frames[frame] = new Frame();
+                        var faces = new Face[1];
+                        for (var face = 0; face < 1; face++)
                         {
-                            slices[slice].Data = reader.ReadBytes(mipSize);
+                            var slices = new Slice[Math.Max((int)header.Depth, 1)];
+                            for (var slice = 0; slice < slices.Length; slice++)
+                            {
+                                slices[slice].Data = reader.ReadBytes(mipSize);
+                            }
+                            faces[face].Slices = slices;
                         }
-                        faces[face].Slices = slices;
+                        frames[frame].Faces = faces;
                     }
-                    frames[frame].Faces = faces;
+                    Mipmaps[mip] = new MipMap
+                    {
+                        Frames = frames,
+                        Format = header.HighResImageFormat,
+                        Info = info,
+                        Width = width,
+                        Height = height
+                    };
                 }
-                Mipmaps[mip] = new MipMap
-                {
-                    Frames = frames,
-                    Format = header.HighResImageFormat,
-                    Info = info,
-                    Width = width,
-                    Height = height
-                };
-            }
-
-            if (reader.BaseStream.Position != startPosition + length)
-            {
-                //throw new Exception($"{reader.BaseStream.Position - startPosition + length} bytes left in texture file");
             }
         }
     }

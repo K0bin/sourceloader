@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace CsgoDemoRenderer.Bsp.LumpData
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 32)]
     public struct Leaf
     {
         public BrushContents Contents;

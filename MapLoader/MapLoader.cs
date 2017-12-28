@@ -119,8 +119,7 @@ namespace CsgoDemoRenderer.MapLoader
                     var entry = package.FindEntry("materials/" + textureName.ToLower() + ".vtf");
                     if (entry != null)
                     {
-                        byte[] textureData;
-                        package.ReadEntry(entry, out textureData);
+                        package.ReadEntry(entry, out byte[] textureData);
                         var reader = new BinaryReader(new MemoryStream(textureData));
                         texture = new Texture(reader, textureData.Length);
                         reader.Close();

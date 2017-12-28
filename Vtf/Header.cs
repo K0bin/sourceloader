@@ -6,9 +6,13 @@ using System.Text;
 
 namespace CsgoDemoRenderer.Vtf
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 80)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct Header
     {
+        internal const int Size73 = 80;
+        internal const int Size72 = 80;
+        internal const int Size71 = 64;
+
         internal static int ExpectedSignature = 0x00465456;
         internal int Signature;      // File signature ("VTF\0"). (or as little-endian integer, 0x00465456)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
@@ -43,30 +47,23 @@ namespace CsgoDemoRenderer.Vtf
 
         public static Header Read(BinaryReader reader)
         {
-            Header header = new Header();
-            header.Signature = reader.ReadInt32();
-            header.Version = new uint[] { reader.ReadUInt32(), reader.ReadUInt32() };
-            header.HeaderSize = reader.ReadUInt32();
-            header.Width = reader.ReadUInt16();
-            header.Height = reader.ReadUInt16();
-            header.Flags = (TextureFlags)reader.ReadInt32();
-            header.Frames = reader.ReadUInt16();
-            header.FirstFrame = reader.ReadUInt16();
-            header.Padding0 = reader.ReadBytes(4);
-            header.Reflectivity = new float[] { reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle() };
-            header.Padding1 = reader.ReadBytes(4);
-            header.BumpmapScale = reader.ReadSingle();
-            header.HighResImageFormat = (ImageFormat)reader.ReadUInt32();
-            header.MipmapCount = reader.ReadByte();
-            header.LowResImageFormat = (ImageFormat)reader.ReadUInt32();
-            header.LowResImageWidth = reader.ReadByte();
-            header.LowResImageHeight = reader.ReadByte();
-
-            if (header.Version[0] >= 7 && header.Version[1] >= 2) header.Depth = reader.ReadUInt16();
-            if (header.Version[0] >= 7 && header.Version[1] >= 3)
+            var startPosition = reader.BaseStream.Position;
+            reader.BaseStream.Position = startPosition + 4;
+            var version = new Version((int)reader.ReadUInt32(), (int)reader.ReadUInt32());
+            var headerSize = Header.Size73;
+            if (version < new Version(7, 2))
             {
-                header.Padding2 = reader.ReadBytes(3);
-                header.NumResources = reader.ReadUInt32();
+                headerSize = Header.Size71;
+            }
+            else if (version < new Version(7, 3))
+            {
+                headerSize = Header.Size72;
+            }
+            reader.BaseStream.Position = startPosition;
+            var header = reader.ReadStructure<Header>((int)headerSize);
+            if (header.Signature != Header.ExpectedSignature)
+            {
+                throw new Exception("VTF signature doesn't match.");
             }
             return header;
         }
