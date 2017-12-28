@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsgoDemoRenderer", "CsgoDemoRenderer\CsgoDemoRenderer.csproj", "{17399FAA-73A1-4164-951E-18CF7CD2C9B2}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util", "Util\Util.csproj", "{1B7CFB27-C123-494A-85E2-625BECF310EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapRendererD3D", "MapRendererD3D\MapRendererD3D.csproj", "{DDC356BB-5184-4383-92FE-5115EBB23A05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VtfLibTest", "VtfLib\VtfLibTest.csproj", "{3E723C26-B5BB-47A3-85AC-CB5A60A40527}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{DDC356BB-5184-4383-92FE-5115EBB23A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDC356BB-5184-4383-92FE-5115EBB23A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDC356BB-5184-4383-92FE-5115EBB23A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E723C26-B5BB-47A3-85AC-CB5A60A40527}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E723C26-B5BB-47A3-85AC-CB5A60A40527}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E723C26-B5BB-47A3-85AC-CB5A60A40527}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E723C26-B5BB-47A3-85AC-CB5A60A40527}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

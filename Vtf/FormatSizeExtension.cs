@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CsgoDemoRenderer.Vtf
+namespace CsgoDemoRenderer.ValveTextureFormat
 {
     public struct ImageFormatInfo {
         public ImageFormat Format;

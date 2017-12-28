@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace CsgoDemoRenderer.Vtf
+namespace CsgoDemoRenderer.ValveTextureFormat
 {
     public class Material
     {

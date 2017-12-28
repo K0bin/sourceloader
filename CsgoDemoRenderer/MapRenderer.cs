@@ -65,21 +65,21 @@ namespace CsgoDemoRenderer
                 GL.TextureParameter(oglTexture, TextureParameterName.TextureBaseLevel, 0);
                 GL.TextureParameter(oglTexture, TextureParameterName.TextureMaxLevel, texture.Mipmaps.Length);
                 texI++;
-                if (texture.Mipmaps[0].Format == Vtf.ImageFormat.Dxt1)
+                if (texture.Mipmaps[0].Format == ValveTextureFormat.ImageFormat.Dxt1)
                 {
                     if (part.Texture.Mipmaps.Length < 1 || part.Texture.Mipmaps[0].Width < 1 || part.Texture.Mipmaps[0].Height < 1 || oglTexture == 0)
                     {
                         continue;
                     }
-                    //GL.TextureStorage2D(oglTexture, part.Texture.Mipmaps.Length, (SizedInternalFormat)All.CompressedRgbS3tcDxt1Ext, part.Texture.Mipmaps[0].Width, part.Texture.Mipmaps[0].Height);
-                    GL.TextureStorage2D(oglTexture, 1, (SizedInternalFormat)All.CompressedRgbS3tcDxt1Ext, part.Texture.Mipmaps[0].Width, part.Texture.Mipmaps[0].Height);
+                    GL.TextureStorage2D(oglTexture, part.Texture.Mipmaps.Length, (SizedInternalFormat)All.CompressedRgbS3tcDxt1Ext, part.Texture.Mipmaps[0].Width, part.Texture.Mipmaps[0].Height);
+                    //GL.TextureStorage2D(oglTexture, 1, (SizedInternalFormat)All.CompressedRgbS3tcDxt1Ext, part.Texture.Mipmaps[0].Width, part.Texture.Mipmaps[0].Height);
                     if (GL.GetError() != ErrorCode.NoError)
                     {
                         //throw new Exception();
                     }
 
-                    //for (var i = 0; i < texture.Mipmaps.Length; i++)
-                    for (var i = 0; i < 1; i++)
+                    for (var i = 0; i < texture.Mipmaps.Length; i++)
+                    //for (var i = 0; i < 1; i++)
                     {
                         var mipmap = texture.Mipmaps[i];
                         var slice = mipmap.Frames?.FirstOrDefault().Faces?.FirstOrDefault().Slices?.FirstOrDefault();

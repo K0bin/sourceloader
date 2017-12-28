@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CsgoDemoRenderer.Vtf
+namespace CsgoDemoRenderer.ValveTextureFormat
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct Header
@@ -61,6 +61,14 @@ namespace CsgoDemoRenderer.Vtf
             }
             reader.BaseStream.Position = startPosition;
             var header = reader.ReadStructure<Header>((int)headerSize);
+            if (version < new Version(7,3) && header.HeaderSize != headerSize)
+            {
+                throw new Exception("Header sizes don't match.");
+            }
+            else if (version < new Version(7,3) && (header.HeaderSize - headerSize) / 8 != header.NumResources)
+            {
+                throw new Exception("Header size doesn't match the number of resources.");
+            }
             if (header.Signature != Header.ExpectedSignature)
             {
                 throw new Exception("VTF signature doesn't match.");

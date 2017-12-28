@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace CsgoDemoRenderer.Vtf
+namespace CsgoDemoRenderer.ValveTextureFormat
 {
     enum Resources
     {
@@ -28,6 +28,8 @@ namespace CsgoDemoRenderer.Vtf
                     var b = reader.ReadByte();
                     var c = reader.ReadByte();
                     var d = reader.ReadByte();
+                    var value = reader.ReadInt32();
+
                     var id = a | (b << 8) | (c << 16) | (d << 24);
                     Resources resource = Resources.Unknown;
                     switch (id)
@@ -40,7 +42,6 @@ namespace CsgoDemoRenderer.Vtf
                             resource = Resources.Image;
                             break;
                     }
-                    var value = reader.ReadInt32();
 
                     if (resource != Resources.Unknown)
                     {

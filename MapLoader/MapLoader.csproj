@@ -4,12 +4,18 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>false</Optimize>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ValvePak" Version="0.4.0.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Bsp\Bsp.csproj" />
+    <ProjectReference Include="..\VtfLib\VtfLibTest.csproj" />
     <ProjectReference Include="..\Vtf\Vtf.csproj" />
   </ItemGroup>
 

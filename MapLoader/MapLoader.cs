@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Text;
 using SteamDatabase.ValvePak;
 using System.IO;
-using CsgoDemoRenderer.Vtf;
+using CsgoDemoRenderer.ValveTextureFormat;
 using Util;
 
 namespace CsgoDemoRenderer.MapLoader
@@ -16,7 +16,7 @@ namespace CsgoDemoRenderer.MapLoader
         public string Name;
         public int IndicesCount;
         public Material Material;
-        public Texture Texture;
+        public ValveTextureFormat.VtfFile Texture;
     }
 
     public class MapLoader
@@ -29,7 +29,7 @@ namespace CsgoDemoRenderer.MapLoader
         { get; private set; }
 
         private readonly Dictionary<string, Material> materials = new Dictionary<string, Material>();
-        private readonly Dictionary<string, Texture> textures = new Dictionary<string, Texture>();
+        private readonly Dictionary<string, ValveTextureFormat.VtfFile> textures = new Dictionary<string, ValveTextureFormat.VtfFile>();
         private readonly Dictionary<string, List<uint>> indicesByTexture = new Dictionary<string, List<uint>>();
         private readonly List<Vertex> vertices = new List<Vertex>();
         private readonly Map map;
@@ -54,7 +54,7 @@ namespace CsgoDemoRenderer.MapLoader
             {
                 indices.AddRange(value);
                 Material material;
-                Texture texture;
+                ValveTextureFormat.VtfFile texture;
                 string textureName = key;
                 if (!materials.TryGetValue(key, out material))
                 {
@@ -102,6 +102,7 @@ namespace CsgoDemoRenderer.MapLoader
             var faces = map.Lumps.GetFaces();
             var edges = map.Lumps.GetEdges();
             var surfEdges = map.Lumps.GetSurfaceEdges();
+            VtfLib.VtfLibLoader.Initialize();
             for (var leafFaceIndex = leaf.FirstLeafFace; leafFaceIndex < leaf.FirstLeafFace + leaf.LeafFacesCount; leafFaceIndex++)
             {
                 var faceIndex = leafFaces[leafFaceIndex];
@@ -112,7 +113,7 @@ namespace CsgoDemoRenderer.MapLoader
                 var textureName = map.Lumps.GetTextureDataString()[textureOffset];
                 uint rootVertex = 0;
 
-                Texture texture;
+                ValveTextureFormat.VtfFile texture;
                 Material material;
                 if (!textures.TryGetValue(textureName, out texture) && !materials.TryGetValue(textureName, out material))
                 {
@@ -121,8 +122,9 @@ namespace CsgoDemoRenderer.MapLoader
                     {
                         package.ReadEntry(entry, out byte[] textureData);
                         var reader = new BinaryReader(new MemoryStream(textureData));
-                        texture = new Texture(reader, textureData.Length);
+                        texture = new ValveTextureFormat.VtfFile(reader, textureData.Length);
                         reader.Close();
+
                         textures.Add(textureName, texture);
                         Console.WriteLine("Loaded texture: " + textureName);
                     }
@@ -218,6 +220,7 @@ namespace CsgoDemoRenderer.MapLoader
                     }
                 }
             }
+            VtfLib.VtfLibLoader.Shutdown();
         }
 
         private void BuildBuffers(Node node)
