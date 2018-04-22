@@ -28,7 +28,14 @@ namespace Csgo.MapLoader
                 }
                 else
                 {
-                    return null;
+                    if (Values.TryGetValue("phong", out string name1))
+                    {
+                        return name;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
         }
@@ -49,7 +56,7 @@ namespace Csgo.MapLoader
             var lines = block.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
-                var trimmedLine = line.Replace("$", "").Replace("%", "").Replace("\"", "").Replace("'", "");
+                var trimmedLine = line.Replace("$", "").Replace("%", "").Replace("\"", "").Replace("'", "").Trim();
                 var keyEnd = trimmedLine.IndexOf(' ');
                 if (keyEnd == -1)
                 {

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Csgo.MapLoader
 {
-    public class Resources: IDisposable
+    public class ResourceManager: IDisposable
     {
         private readonly Package csgoResources;
 
@@ -25,7 +25,7 @@ namespace Csgo.MapLoader
             }
         }
 
-        public Resources(string csgoDirectory, Map map)
+        public ResourceManager(string csgoDirectory, Map map)
         {
             csgoResources = new Package();
             var file = Path.Combine(csgoDirectory, "csgo", "pak01_dir.vpk");
@@ -35,7 +35,7 @@ namespace Csgo.MapLoader
             embeddedResources = new ZipArchive(embeddedStream);
         }
 
-        ~Resources()
+        ~ResourceManager()
         {
             Dispose(false);
         }
