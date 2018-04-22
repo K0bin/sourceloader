@@ -20,10 +20,16 @@ namespace Csgo.MapLoader
 
     public class Model
     {
-        public List<MaterialMesh> Meshes
+        public Mesh Mesh
         {
             get; protected set;
-        } = new List<MaterialMesh>();
+        }
+
+        public SourceMaterial[] Materials
+        {
+            get;
+            protected set;
+        }
 
         public Vector3 Position
         { get; set; }
