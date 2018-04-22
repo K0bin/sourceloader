@@ -12,12 +12,12 @@ namespace Csgo.MapLoader
     public class BrushModel: Model
     {
         private readonly Map map;
-        private readonly Materials materials;
+        private readonly MaterialManager materials;
 
         private readonly Dictionary<string, List<uint>> indicesByTexture = new Dictionary<string, List<uint>>();
         private readonly List<Vertex> vertices = new List<Vertex>();
 
-        public BrushModel(Map map, Materials materials)
+        public BrushModel(Map map, MaterialManager materials)
         {
             this.map = map;
             this.materials = materials;

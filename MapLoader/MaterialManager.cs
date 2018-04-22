@@ -6,13 +6,13 @@ using System.Text;
 
 namespace Csgo.MapLoader
 {
-    public class Materials
+    public class MaterialManager
     {
-        private Resources resources;
+        private ResourceManager resources;
         private readonly Dictionary<string, SourceMaterial> materials = new Dictionary<string, SourceMaterial>();
         private readonly Dictionary<string, SourceTexture> textures = new Dictionary<string, SourceTexture>();
 
-        public Materials(Resources resources)
+        public MaterialManager(ResourceManager resources)
         {
             this.resources = resources;
         }

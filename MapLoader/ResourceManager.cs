@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Csgo.MapLoader
 {
-    public class Resources: IDisposable
+    public class ResourceManager: IDisposable
     {
         private readonly Package csgoResources;
 
@@ -27,7 +27,7 @@ namespace Csgo.MapLoader
             }
         }
 
-        public Resources(string csgoDirectory, Map map)
+        public ResourceManager(string csgoDirectory, Map map)
         {
             csgoResources = new Package();
             var file = Path.Combine(Path.Combine(csgoDirectory, "csgo"), "pak01_dir.vpk");
@@ -37,7 +37,7 @@ namespace Csgo.MapLoader
             embeddedResources = ZipFile.Read(embeddedStream);
         }
 
-        ~Resources()
+        ~ResourceManager()
         {
             Dispose(false);
         }
