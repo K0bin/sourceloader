@@ -48,6 +48,10 @@ namespace Csgo.MapLoader
                     }
                 }
 
+                if (meshIndices.Count % 3 != 0)
+                {
+                    throw new Exception("Broken triangles");
+                }
                 this.Meshes.Add(new MaterialMesh(materials[materialName], new Mesh {
                     Indices = meshIndices.ToArray(),
                     Vertices = meshVertices.ToArray()
