@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetZip">
+      <HintPath>..\DotNetZip.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +62,10 @@
     <ProjectReference Include="..\Util\Util.csproj">
       <Project>{d2e559cb-d775-439d-aae7-77015092c365}</Project>
       <Name>Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ValvePak\ValvePak.csproj">
+      <Project>{4bd929fd-8581-44d7-870d-919e566b3c10}</Project>
+      <Name>ValvePak</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vtf\ValveTextureFormat.csproj">
       <Project>{05bfe36d-f069-4ad0-b945-a8aa8a528490}</Project>

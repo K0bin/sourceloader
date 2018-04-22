@@ -67,7 +67,10 @@ namespace Csgo.MapLoader
                     texture = new ValveTextureFormat.SourceTexture(reader);
                     reader.Close();
 
-                    textures.TryAdd(name, texture);
+                    if (!textures.ContainsKey(name))
+                    {
+                        textures.Add(name, texture);
+                    }
                     Console.WriteLine("Loaded texture: " + name);
                 }
             }
