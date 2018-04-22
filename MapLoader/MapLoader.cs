@@ -7,7 +7,7 @@ using System.Text;
 using SteamDatabase.ValvePak;
 using System.IO;
 using System.Linq;
-using Csgo.ValveTextureFormat;
+using Csgo.Vtf;
 using Csgo.Util;
 using System.Threading;
 using System.IO.Compression;

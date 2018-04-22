@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Csgo.ValveTextureFormat
+namespace Csgo.Vtf
 {
     [Flags]
     public enum TextureFlags: uint

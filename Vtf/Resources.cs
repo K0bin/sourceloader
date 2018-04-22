@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Csgo.ValveTextureFormat
+namespace Csgo.Vtf
 {
     enum Resources
     {

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Csgo.Util;
 
-namespace Csgo.ValveTextureFormat
+namespace Csgo.Vtf
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct Header

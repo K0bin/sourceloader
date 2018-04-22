@@ -16,7 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bsp\Bsp.csproj" />
-    <ProjectReference Include="..\Vtf\ValveTextureFormat.csproj" />
+    <ProjectReference Include="..\Util\Util.csproj" />
+    <ProjectReference Include="..\Vtf\Vtf.csproj" />
   </ItemGroup>
 
 </Project>

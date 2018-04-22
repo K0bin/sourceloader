@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Csgo.ValveTextureFormat
+namespace Csgo.Vtf
 {
     public struct Thumbnail
     {

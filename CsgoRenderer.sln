@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bsp", "Bsp\Bsp.csproj", "{4D35EC2C-9553-4264-8326-33E642E8C708}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValveTextureFormat", "Vtf\ValveTextureFormat.csproj", "{357711FD-F806-44BC-BADB-F39269516C1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vtf", "Vtf\Vtf.csproj", "{357711FD-F806-44BC-BADB-F39269516C1B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapLoader", "MapLoader\MapLoader.csproj", "{EB003095-3310-415C-BD09-DA5F5CC5F310}"
 EndProject

@@ -1,7 +1,7 @@
 ﻿using Csgo.Bsp;
 using Csgo.Bsp.LumpData;
 using Csgo.Util;
-using Csgo.ValveTextureFormat;
+using Csgo.Vtf;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
