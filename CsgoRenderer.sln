@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsgoRenderer", "Renderer\Renderer.csproj", "{17399FAA-73A1-4164-951E-18CF7CD2C9B2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bsp", "Bsp\Bsp.csproj", "{4D35EC2C-9553-4264-8326-33E642E8C708}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValveTextureFormat", "Vtf\ValveTextureFormat.csproj", "{357711FD-F806-44BC-BADB-F39269516C1B}"
@@ -13,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapLoader", "MapLoader\MapL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util", "Util\Util.csproj", "{1B7CFB27-C123-494A-85E2-625BECF310EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exporter", "Exporter\Exporter.csproj", "{5B4395ED-94B5-4A0B-8CF2-AE310ECB2825}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exporter", "Exporter\Exporter.csproj", "{5B4395ED-94B5-4A0B-8CF2-AE310ECB2825}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{17399FAA-73A1-4164-951E-18CF7CD2C9B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17399FAA-73A1-4164-951E-18CF7CD2C9B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17399FAA-73A1-4164-951E-18CF7CD2C9B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17399FAA-73A1-4164-951E-18CF7CD2C9B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4D35EC2C-9553-4264-8326-33E642E8C708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4D35EC2C-9553-4264-8326-33E642E8C708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D35EC2C-9553-4264-8326-33E642E8C708}.Release|Any CPU.ActiveCfg = Release|Any CPU
