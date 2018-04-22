@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Csgo.ValveTextureFormat
+namespace Csgo.Vtf
 {
     public enum ImageFormat: uint
     {

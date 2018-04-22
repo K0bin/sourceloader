@@ -1,4 +1,4 @@
-﻿using Csgo.ValveTextureFormat;
+﻿using Csgo.Vtf;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -64,7 +64,7 @@ namespace Csgo.MapLoader
                 if (data != null)
                 {
                     var reader = new BinaryReader(new MemoryStream(data));
-                    texture = new ValveTextureFormat.SourceTexture(reader);
+                    texture = new Vtf.SourceTexture(reader);
                     reader.Close();
 
                     if (!textures.ContainsKey(name))

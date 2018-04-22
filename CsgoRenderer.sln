@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bsp", "Bsp\Bsp.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", "{D2E559CB-D775-439D-AAE7-77015092C365}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValveTextureFormat", "Vtf\ValveTextureFormat.csproj", "{05BFE36D-F069-4AD0-B945-A8AA8A528490}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vtf", "Vtf\Vtf.csproj", "{05BFE36D-F069-4AD0-B945-A8AA8A528490}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValvePak", "ValvePak\ValvePak.csproj", "{4BD929FD-8581-44D7-870D-919E566B3C10}"
 EndProject
