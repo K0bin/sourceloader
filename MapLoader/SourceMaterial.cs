@@ -13,6 +13,12 @@ namespace Csgo.MapLoader
         {
             get; private set;
         }
+
+        public string Name
+        {
+            get; private set;
+        }
+
         public Dictionary<string, string> Values
         {
             get; private set;
@@ -44,9 +50,10 @@ namespace Csgo.MapLoader
         {
             Values.Add("basetexture", textureName);
             ShaderName = ShaderLightMappedGeneric;
+            Name = textureName;
         }
 
-        public SourceMaterial(BinaryReader reader, int length)
+        public SourceMaterial(BinaryReader reader, int length, string name)
         {
             var text = Encoding.ASCII.GetString(reader.ReadBytes(length));
             var blockStart = text.IndexOf('{');
@@ -66,6 +73,7 @@ namespace Csgo.MapLoader
                 var value = trimmedLine.Substring(keyEnd + 1);
                 Values[key] = value;
             }
+            this.Name = name;
         }
     }
 }

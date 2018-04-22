@@ -36,7 +36,7 @@ namespace Csgo.MapLoader
                 {
                     using (var reader = new BinaryReader(new MemoryStream(data)))
                     {
-                        material = new SourceMaterial(reader, data.Length);
+                        material = new SourceMaterial(reader, data.Length, name);
                     }
                     materials.Add(name, material);
                     Console.WriteLine("Loaded material: " + name);
