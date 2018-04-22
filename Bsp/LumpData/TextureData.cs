@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Numerics;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace Csgo.Bsp.LumpData
 {

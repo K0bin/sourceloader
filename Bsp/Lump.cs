@@ -17,8 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 using Csgo.Bsp.LumpData;
 using System.IO;
-using System.Numerics;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace Csgo.Bsp
 {

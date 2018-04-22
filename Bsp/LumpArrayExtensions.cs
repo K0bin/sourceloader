@@ -1,8 +1,8 @@
 ﻿using Csgo.Bsp.LumpData;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Text;
+using UnityEngine;
 
 namespace Csgo.Bsp
 {
@@ -16,7 +16,7 @@ namespace Csgo.Bsp
         {
             return (lumps[(int)LumpType.Leafs].Data as ArrayLumpData<Leaf>)?.Elements;
         }
-        public static Vector3[] GetVertices(this Lump[] lumps)
+        public static UnityEngine.Vector3[] GetVertices(this Lump[] lumps)
         {
             return (lumps[(int)LumpType.Vertices].Data as ArrayLumpData<Vector3>)?.Elements;
         }

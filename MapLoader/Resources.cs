@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using Ionic.Zip;
+using System.Linq;
 
 namespace Csgo.MapLoader
 {
@@ -13,7 +15,7 @@ namespace Csgo.MapLoader
         private readonly Package csgoResources;
 
         private readonly Stream embeddedStream;
-        private readonly ZipArchive embeddedResources;
+        private readonly ZipFile embeddedResources;
 
         private bool isDisposed = false;
 
@@ -28,11 +30,11 @@ namespace Csgo.MapLoader
         public Resources(string csgoDirectory, Map map)
         {
             csgoResources = new Package();
-            var file = Path.Combine(csgoDirectory, "csgo", "pak01_dir.vpk");
+            var file = Path.Combine(Path.Combine(csgoDirectory, "csgo"), "pak01_dir.vpk");
             csgoResources.Read(file);
-
+            
             embeddedStream = new MemoryStream(map.Lumps.GetPakFile());
-            embeddedResources = new ZipArchive(embeddedStream);
+            embeddedResources = ZipFile.Read(embeddedStream);
         }
 
         ~Resources()
@@ -70,11 +72,13 @@ namespace Csgo.MapLoader
             }
             else
             {
-                var zipEntry = embeddedResources.GetEntry(name);
+                var zipEntry = embeddedResources.SelectEntries(name).FirstOrDefault();
                 if (zipEntry == null) return null;
-                byte[] data = new byte[zipEntry.Length];
-                using (var stream = zipEntry.Open())
+                byte[] data = new byte[zipEntry.UncompressedSize];
+                using (var stream = new MemoryStream())
                 {
+                    zipEntry.Extract(stream);
+                    stream.Position = 0;
                     stream.Read(data, 0, data.Length);
                 }
                 return data;

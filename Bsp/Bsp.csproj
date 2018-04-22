@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>340294d4-f985-4a22-af1d-f08e61974f8a</ProjectGuid>
+    <ProjectGuid>{340294D4-F985-4A22-AF1D-F08E61974F8A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Bsp</RootNamespace>
@@ -30,20 +30,42 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System"/>
-    
-    <Reference Include="System.Core"/>
-    <Reference Include="System.Xml.Linq"/>
-    <Reference Include="System.Data.DataSetExtensions"/>
-    
-    
-    <Reference Include="System.Data"/>
-    
-    <Reference Include="System.Xml"/>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>E:\Engines\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Lump.cs" />
+    <Compile Include="LumpArrayExtensions.cs" />
+    <Compile Include="LumpData\Brush.cs" />
+    <Compile Include="LumpData\BrushSide.cs" />
+    <Compile Include="LumpData\Data.cs" />
+    <Compile Include="LumpData\DisplacementInfo.cs" />
+    <Compile Include="LumpData\DisplacementTriangle.cs" />
+    <Compile Include="LumpData\DisplacementVertex.cs" />
+    <Compile Include="LumpData\Edge.cs" />
+    <Compile Include="LumpData\Face.cs" />
+    <Compile Include="LumpData\Leaf.cs" />
+    <Compile Include="LumpData\Node.cs" />
+    <Compile Include="LumpData\Plane.cs" />
+    <Compile Include="LumpData\TextureData.cs" />
+    <Compile Include="LumpData\TextureDataString.cs" />
+    <Compile Include="LumpData\TextureInfo.cs" />
+    <Compile Include="LumpType.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Util\Util.csproj">
+      <Project>{d2e559cb-d775-439d-aae7-77015092c365}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
- </Project>
+</Project>

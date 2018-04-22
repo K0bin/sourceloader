@@ -4,8 +4,8 @@ using Csgo.Util;
 using Csgo.ValveTextureFormat;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Text;
+using UnityEngine;
 
 namespace Csgo.MapLoader
 {
@@ -24,8 +24,11 @@ namespace Csgo.MapLoader
             var rootNode = map.Lumps.GetNodes()[0];
             BuildBuffers(rootNode);
 
-            foreach(var (materialName, indices) in indicesByTexture)
+            foreach(var keyValue in indicesByTexture)
             {
+                var materialName = keyValue.Key;
+                var indices = keyValue.Value;
+
                 var indexPositions = new Dictionary<uint, uint>();
                 var meshIndices = new List<uint>();
                 var meshVertices = new List<Vertex>();
@@ -45,7 +48,7 @@ namespace Csgo.MapLoader
                     }
                 }
 
-                this.Meshes.Add((materials[materialName], new Mesh {
+                this.Meshes.Add(new MaterialMesh(materials[materialName], new Mesh {
                     Indices = meshIndices.ToArray(),
                     Vertices = meshVertices.ToArray()
                 }));
@@ -107,8 +110,8 @@ namespace Csgo.MapLoader
                             {
                                 vertex.TextureCoord = new Vector2
                                 {
-                                    X = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsS) / texWidth,
-                                    Y = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsT) / texHeight,
+                                    x = Vector4.Dot(new Vector4(vertex.Position.x, vertex.Position.y, vertex.Position.z, 1), texInfo.TextureVecsS) / texWidth,
+                                    y = Vector4.Dot(new Vector4(vertex.Position.x, vertex.Position.y, vertex.Position.z, 1), texInfo.TextureVecsT) / texHeight,
                                 };
                             }
                             else
@@ -138,8 +141,8 @@ namespace Csgo.MapLoader
                             {
                                 vertex.TextureCoord = new Vector2
                                 {
-                                    X = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsS) / texWidth,
-                                    Y = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsT) / texHeight,
+                                    x = Vector4.Dot(new Vector4(vertex.Position.x, vertex.Position.y, vertex.Position.z, 1), texInfo.TextureVecsS) / texWidth,
+                                    y = Vector4.Dot(new Vector4(vertex.Position.x, vertex.Position.y, vertex.Position.z, 1), texInfo.TextureVecsT) / texHeight,
                                 };
                             }
                             else
@@ -148,8 +151,8 @@ namespace Csgo.MapLoader
                             }
                             vertex.LightmapTextureCoord = new Vector2
                             {
-                                X = (Vector3.Dot(vertex.Position, texInfo.LightmapVecsS.Xyz()) + texInfo.LightmapVecsS.W) / texData.Width,
-                                Y = (Vector3.Dot(vertex.Position, texInfo.LightmapVecsT.Xyz()) + texInfo.LightmapVecsT.W) / texData.Height,
+                                x = (Vector3.Dot(vertex.Position, texInfo.LightmapVecsS.Xyz()) + texInfo.LightmapVecsS.w) / texData.Width,
+                                y = (Vector3.Dot(vertex.Position, texInfo.LightmapVecsT.Xyz()) + texInfo.LightmapVecsT.w) / texData.Height,
                             };
                             faceVertices.Add(edge.VertexIndex[i], (uint)vertices.Count);
                             vertices.Add(vertex);
@@ -182,8 +185,10 @@ namespace Csgo.MapLoader
         private void CalculateNormals()
         {
             List<uint> indices = new List<uint>();
-            foreach (var (_, textureIndices) in indicesByTexture)
+            foreach (var keyValue in indicesByTexture)
             {
+                var textureIndices = keyValue.Value;
+
                 foreach (var index in textureIndices)
                 {
                     indices.Add(index);

@@ -2,7 +2,6 @@
 using Csgo.Bsp.LumpData;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Text;
 using SteamDatabase.ValvePak;
 using System.IO;
@@ -40,7 +39,7 @@ namespace Csgo.MapLoader
         {
             this.mapName = mapName;
 
-            var mapPath = Path.Combine(csgoDirectory, "csgo", "maps", mapName + ".bsp");
+            var mapPath = Path.Combine(Path.Combine(Path.Combine(csgoDirectory, "csgo"), "maps"), mapName + ".bsp");
             using (var reader = new BinaryReader(new FileStream(mapPath, FileMode.Open)))
             {
                 this.map = Map.Load(reader);

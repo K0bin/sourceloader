@@ -12,19 +12,19 @@ namespace Csgo.Util
         {
             if (size <= 0)
             {
-                size = Marshal.SizeOf<T>();
+                size = Marshal.SizeOf(typeof(T));
             }
             var data = reader.ReadBytes(size);
             var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            var structure = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+            var structure = Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
             handle.Free();
-            return structure;
+            return (T)structure;
         }
         public static T[] ReadStructArray<T>(this BinaryReader reader, int length, int structSize = 0) where T : struct
         {
             if (structSize <= 0)
             {
-                structSize = Marshal.SizeOf<T>();
+                structSize = Marshal.SizeOf(typeof(T));
             }
             var count = length / structSize;
 

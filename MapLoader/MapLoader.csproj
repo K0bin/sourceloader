@@ -36,6 +36,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>E:\Engines\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BrushModel.cs" />
@@ -47,6 +50,20 @@
     <Compile Include="Resources.cs" />
     <Compile Include="SourceMaterial.cs" />
     <Compile Include="Vertex.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bsp\Bsp.csproj">
+      <Project>{340294d4-f985-4a22-af1d-f08e61974f8a}</Project>
+      <Name>Bsp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Util\Util.csproj">
+      <Project>{d2e559cb-d775-439d-aae7-77015092c365}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vtf\ValveTextureFormat.csproj">
+      <Project>{05bfe36d-f069-4ad0-b945-a8aa8a528490}</Project>
+      <Name>ValveTextureFormat</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
