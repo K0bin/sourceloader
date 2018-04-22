@@ -20,9 +20,9 @@ namespace Csgo.MapLoader
             get => mapName;
         }
         
-        public MaterialManager Materials
+        public MaterialManager MaterialManager
         {
-            get => materials;
+            get => materialManager;
         }
 
         public BrushModel Brushes
@@ -32,8 +32,8 @@ namespace Csgo.MapLoader
 
         private readonly string mapName;
         private readonly Map map;
-        private readonly ResourceManager resources;
-        private readonly MaterialManager materials;
+        private readonly ResourceManager resourceManager;
+        private readonly MaterialManager materialManager;
 
         public MapLoader(string csgoDirectory, string mapName)
         {
@@ -45,10 +45,10 @@ namespace Csgo.MapLoader
                 this.map = Map.Load(reader);
             }
 
-            resources = new ResourceManager(csgoDirectory, map);
-            materials = new MaterialManager(resources);
+            resourceManager = new ResourceManager(csgoDirectory, map);
+            materialManager = new MaterialManager(resourceManager);
 
-            Brushes = new BrushModel(map, materials);
+            Brushes = new BrushModel(map, MaterialManager);
         }
     }
 }

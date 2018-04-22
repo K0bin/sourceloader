@@ -8,13 +8,13 @@ namespace Csgo.MapLoader
 {
     public class MaterialManager
     {
-        private ResourceManager resources;
+        private ResourceManager resourceManager;
         private readonly Dictionary<string, SourceMaterial> materials = new Dictionary<string, SourceMaterial>();
         private readonly Dictionary<string, SourceTexture> textures = new Dictionary<string, SourceTexture>();
 
-        public MaterialManager(ResourceManager resources)
+        public MaterialManager(ResourceManager resourceManager)
         {
-            this.resources = resources;
+            this.resourceManager = resourceManager;
         }
 
         public SourceMaterial this[string name]
@@ -31,7 +31,7 @@ namespace Csgo.MapLoader
 
             if (!materials.TryGetValue(name, out SourceMaterial material))
             {
-                var data = resources["materials/" + name.ToLower() + ".vmt"];
+                var data = resourceManager["materials/" + name.ToLower() + ".vmt"];
                 if (data != null)
                 {
                     using (var reader = new BinaryReader(new MemoryStream(data)))
@@ -60,7 +60,7 @@ namespace Csgo.MapLoader
 
             if (!textures.TryGetValue(name, out SourceTexture texture))
             {
-                var data = resources["materials/" + name.ToLower() + ".vtf"];
+                var data = resourceManager["materials/" + name.ToLower() + ".vtf"];
                 if (data != null)
                 {
                     var reader = new BinaryReader(new MemoryStream(data));

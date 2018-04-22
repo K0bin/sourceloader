@@ -12,15 +12,15 @@ namespace Csgo.MapLoader
     public class BrushModel: Model
     {
         private readonly Map map;
-        private readonly MaterialManager materials;
+        private readonly MaterialManager materialManager;
 
         private readonly Dictionary<string, List<uint>> indicesByTexture = new Dictionary<string, List<uint>>();
         private readonly List<Vertex> vertices = new List<Vertex>();
 
-        public BrushModel(Map map, MaterialManager materials)
+        public BrushModel(Map map, MaterialManager materialManager)
         {
             this.map = map;
-            this.materials = materials;
+            this.materialManager = materialManager;
             var rootNode = map.Lumps.GetNodes()[0];
             BuildBuffers(rootNode);
 
@@ -40,7 +40,7 @@ namespace Csgo.MapLoader
                 }
 
                 meshParts[i] = new MeshPart { Indices = indices.ToArray() };
-                modelMaterials[i] = materials[materialName];
+                modelMaterials[i] = materialManager[materialName];
                 i++;
             }
 
@@ -75,17 +75,17 @@ namespace Csgo.MapLoader
 
                 //var normal = normals[normalIndices[faceIndex]];
 
-                SourceMaterial material = materials[textureName];
-                SourceTexture texture = materials.LoadTexture(material?.BaseTextureName);
+                SourceMaterial material = materialManager[textureName];
+                SourceTexture texture = materialManager.LoadTexture(material?.BaseTextureName);
 
                 float texWidth = texData.Width;
                 float texHeight = texData.Height;
                 if (texture != null)
                 {
-                    if (texture.Width != texData.Width || texture.Height != texData.Height)
+                    if (texture.Header.Width != texData.Width || texture.Header.Height != texData.Height)
                     {
-                        texWidth = texture.Width;
-                        texHeight = texture.Height;
+                        texWidth = texture.Header.Width;
+                        texHeight = texture.Header.Height;
                     }
                 }
 
