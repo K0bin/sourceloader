@@ -24,38 +24,32 @@ namespace Csgo.MapLoader
             var rootNode = map.Lumps.GetNodes()[0];
             BuildBuffers(rootNode);
 
+            var meshParts = new MeshPart[indicesByTexture.Count];
+            var modelMaterials = new SourceMaterial[indicesByTexture.Count];
+            var i = 0;
             foreach (var (materialName, indices) in indicesByTexture)
             {
                 var indexPositions = new Dictionary<uint, uint>();
-                var meshIndices = new List<uint>();
-                var meshVertices = new List<Vertex>();
 
-                for (var i = 0; i < indices.Count; i++)
-                {
-                    if (indexPositions.TryGetValue(indices[i], out uint index))
-                    {
-                        meshIndices.Add(index);
-                    }
-                    else
-                    {
-                        index = (uint)(meshVertices.Count);
-                        meshVertices.Add(vertices[(int)indices[i]]);
-                        meshIndices.Add(index);
-                        indexPositions[indices[i]] = index;
-                    }
-                }
-
-                if (meshIndices.Count % 3 != 0)
+                if (indices.Count % 3 != 0)
                 {
                     throw new Exception("Broken triangles");
                 }
-                this.Meshes.Add((materials[materialName], new Mesh {
-                    Indices = meshIndices.ToArray(),
-                    Vertices = meshVertices.ToArray()
-                }));
+
+                meshParts[i] = new MeshPart { Indices = indices.ToArray() };
+                modelMaterials[i] = materials[materialName];
+                i++;
             }
+
+            Mesh = new Mesh
+            {
+                Vertices = vertices.ToArray(),
+                Parts = meshParts
+            };
+            Materials = modelMaterials;
         }
 
+#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
         private void BuildBuffers(Leaf leaf)
         {
             var bspVertices = map.Lumps.GetVertices();
@@ -182,6 +176,7 @@ namespace Csgo.MapLoader
             }
             CalculateNormals();
         }
+#pragma warning restore RECS0018 // Comparison of floating point numbers with equality operator
 
         private void CalculateNormals()
         {

@@ -7,6 +7,11 @@ namespace Csgo.MapLoader
     public struct Mesh
     {
         public Vertex[] Vertices;
+        public MeshPart[] Parts;
+    }
+
+    public struct MeshPart
+    {
         public uint[] Indices;
     }
 }

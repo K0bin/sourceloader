@@ -45,25 +45,19 @@ namespace Csgo.Exporter
         private static void ExportModel(Model model, string path)
         {
             StreamWriter writer = File.CreateText(path);
-            int indexOffset = 0;
-            foreach (var (material, mesh) in model.Meshes)
+            foreach (var v in model.Mesh.Vertices)
             {
-                foreach (var v in mesh.Vertices)
+                var _v = TransformVertexForExport(v);
+                writer.WriteLine($"v {_v.Position.X} {_v.Position.Y} {_v.Position.Z}");
+                writer.WriteLine($"vt {_v.TextureCoord.X} {_v.TextureCoord.Y}");
+            }
+            foreach (var part in model.Mesh.Parts)
+            {
+                for (var i = 0; i <= part.Indices.Length - 3; i += 3)
                 {
-                    var _v = TransformVertexForExport(v);
-                    writer.WriteLine($"v {_v.Position.X} {_v.Position.Y} {_v.Position.Z}");
-                    writer.WriteLine($"vt {_v.TextureCoord.X} {_v.TextureCoord.Y}");
-                }
-                for (var i = 0; i <= mesh.Indices.Length - 3; i += 3)
-                {
-                    if (mesh.Indices[i] > mesh.Vertices.Length)
-                    {
-                        break;
-                    }
-                    writer.WriteLine($"f {indexOffset + mesh.Indices[i] + 1} {indexOffset + mesh.Indices[i + 1] + 1} {indexOffset + mesh.Indices[i + 2] + 1}");
+                    writer.WriteLine($"f {part.Indices[i] + 1} {part.Indices[i + 1] + 1} {part.Indices[i + 2] + 1}");
                     //writer.WriteLine($"f {map.Indices[i] + 1}/{map.Indices[i] + 1} {map.Indices[i + 1] + 1}/{map.Indices[i + 1] + 1} {map.Indices[i + 2] + 1}/{map.Indices[i + 2] + 1}");
                 }
-                indexOffset += mesh.Vertices.Length;
             }
             writer.Close();
         }
