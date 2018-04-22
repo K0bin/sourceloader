@@ -72,7 +72,7 @@ namespace Csgo.MapLoader
             }
             else
             {
-                var zipEntry = embeddedResources.SelectEntries(name).FirstOrDefault();
+                var zipEntry = embeddedResources.Entries.FirstOrDefault(it => it.FileName == name);
                 if (zipEntry == null) return null;
                 byte[] data = new byte[zipEntry.UncompressedSize];
                 using (var stream = new MemoryStream())

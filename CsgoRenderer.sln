@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValveTextureFormat", "Vtf\V
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValvePak", "ValvePak\ValvePak.csproj", "{4BD929FD-8581-44D7-870D-919E566B3C10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{6707707E-1244-4BBE-81E1-267D57575C7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{4BD929FD-8581-44D7-870D-919E566B3C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BD929FD-8581-44D7-870D-919E566B3C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BD929FD-8581-44D7-870D-919E566B3C10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6707707E-1244-4BBE-81E1-267D57575C7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6707707E-1244-4BBE-81E1-267D57575C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6707707E-1244-4BBE-81E1-267D57575C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6707707E-1244-4BBE-81E1-267D57575C7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
