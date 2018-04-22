@@ -24,7 +24,7 @@ namespace Csgo.MapLoader
             var rootNode = map.Lumps.GetNodes()[0];
             BuildBuffers(rootNode);
 
-            foreach(var (materialName, indices) in indicesByTexture)
+            foreach (var (materialName, indices) in indicesByTexture)
             {
                 var indexPositions = new Dictionary<uint, uint>();
                 var meshIndices = new List<uint>();
@@ -45,6 +45,10 @@ namespace Csgo.MapLoader
                     }
                 }
 
+                if (meshIndices.Count % 3 != 0)
+                {
+                    throw new Exception("Broken triangles");
+                }
                 this.Meshes.Add((materials[materialName], new Mesh {
                     Indices = meshIndices.ToArray(),
                     Vertices = meshVertices.ToArray()
