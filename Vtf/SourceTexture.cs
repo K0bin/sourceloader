@@ -50,12 +50,7 @@ namespace Csgo.Vtf
     }
     public class SourceTexture
     {
-        private Header header;
-        public ImageFormatInfo HighResFormat
-        {
-            get; private set;
-        }
-        public ImageFormatInfo LowResFormat
+        public Header Header
         {
             get; private set;
         }
@@ -68,55 +63,45 @@ namespace Csgo.Vtf
             get; private set;
         }
 
-        public int Width
-        {
-            get => header.Width;
-        }
-
-        public int Height
-        {
-            get => header.Height;
-        }
-
         public SourceTexture(BinaryReader reader)
         {
-            header = Header.Read(reader);
-            var resourceDictionary = header.BuildResourceDictionary(reader);
+            Header = Header.Read(reader);
+            var resourceDictionary = Header.BuildResourceDictionary(reader);
             
             if (resourceDictionary.TryGetValue(Resources.Thumbnail, out int thumbnailOffset))
             {
                 reader.BaseStream.Position = thumbnailOffset;
-                var thumbnailFormatInfo = header.LowResImageFormat.GetInfo();
-                var data = reader.ReadBytes(header.LowResImageWidth * header.LowResImageHeight * thumbnailFormatInfo.Value.TotalBits / 8);
+                var thumbnailFormatInfo = Header.LowResImageFormat.GetInfo();
+                var data = reader.ReadBytes(Header.LowResImageWidth * Header.LowResImageHeight * thumbnailFormatInfo.Value.TotalBits / 8);
                 Thumbnail = new Thumbnail
                 {
                     Data = data,
-                    Format = header.LowResImageFormat,
+                    Format = Header.LowResImageFormat,
                     Info = thumbnailFormatInfo.Value,
-                    Width = header.LowResImageWidth,
-                    Height = header.LowResImageHeight
+                    Width = Header.LowResImageWidth,
+                    Height = Header.LowResImageHeight
                 };
             }
 
             if (resourceDictionary.TryGetValue(Resources.Image, out int imageOffset))
             {
                 reader.BaseStream.Position = imageOffset;
-                var info = header.HighResImageFormat.GetInfo().Value;
-                Mipmaps = new MipMap[header.MipmapCount];
+                var info = Header.HighResImageFormat.GetInfo().Value;
+                Mipmaps = new MipMap[Header.MipmapCount];
                 //for (var mip = 0; mip < header.MipmapCount; mip++)
-                for (var mip = header.MipmapCount - 1; mip >= 0; mip--)
+                for (var mip = Header.MipmapCount - 1; mip >= 0; mip--)
                 {
-                    var width = header.Width >> mip;
-                    var height = header.Height >> mip;
+                    var width = Header.Width >> mip;
+                    var height = Header.Height >> mip;
                     var mipSize = CalculateImageSize(width, height, 1, info);
-                    var frames = new Frame[header.Frames];
-                    for (var frame = header.FirstFrame; frame < header.Frames; frame++)
+                    var frames = new Frame[Header.Frames];
+                    for (var frame = Header.FirstFrame; frame < Header.Frames; frame++)
                     {
                         frames[frame] = new Frame();
                         var faces = new Face[1];
                         for (var face = 0; face < 1; face++)
                         {
-                            var slices = new Slice[Math.Max((int)header.Depth, 1)];
+                            var slices = new Slice[Math.Max((int)Header.Depth, 1)];
                             for (var slice = 0; slice < slices.Length; slice++)
                             {
                                 slices[slice].Data = reader.ReadBytes(mipSize);
@@ -128,7 +113,7 @@ namespace Csgo.Vtf
                     Mipmaps[mip] = new MipMap
                     {
                         Frames = frames,
-                        Format = header.HighResImageFormat,
+                        Format = Header.HighResImageFormat,
                         Info = info,
                         Width = width,
                         Height = height
@@ -156,14 +141,6 @@ namespace Csgo.Vtf
                 default:
                     return width * height * depth * formatInfo.TotalBits;
             }
-        }
-
-        public SourceTexture(ImageFormatInfo format, MipMap[] mipmaps, ImageFormatInfo thumbnailFormat, Thumbnail thumbnail)
-        {
-            this.HighResFormat = format;
-            this.LowResFormat = thumbnailFormat;
-            this.Thumbnail = thumbnail;
-            this.Mipmaps = mipmaps;
         }
     }
 }
