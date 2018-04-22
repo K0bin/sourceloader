@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Csgo.Util;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace CsgoDemoRenderer.Bsp.LumpData
+namespace Csgo.Bsp.LumpData
 {
     public class LumpData
     {
@@ -18,7 +19,7 @@ namespace CsgoDemoRenderer.Bsp.LumpData
         public ArrayLumpData(BinaryReader reader, int length)
         {
             if (reader == null) { return; }
-            Elements = reader.ReadStructureArray<T>(length);
+            Elements = reader.ReadStructArray<T>(length);
         }
 
         public override string ToString() => $"{typeof(T).ToString()}[{Elements.Length}";

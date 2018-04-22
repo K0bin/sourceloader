@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace Util
+namespace Csgo.Util
 {
     public static class VectorExtensions
     {

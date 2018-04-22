@@ -15,12 +15,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-using CsgoDemoRenderer.Bsp.LumpData;
+using Csgo.Bsp.LumpData;
 using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace CsgoDemoRenderer.Bsp
+namespace Csgo.Bsp
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 16)]
     public struct Lump
@@ -122,6 +122,9 @@ namespace CsgoDemoRenderer.Bsp
                     break;
                 case LumpType.VertexNormalIndices:
                     lump.Data = new ArrayLumpData<uint>(reader, lump.FileLength);
+                    break;
+                case LumpType.PakFile:
+                    lump.Data = new ArrayLumpData<byte>(reader, lump.FileLength);
                     break;
             }
             reader.BaseStream.Position = position;

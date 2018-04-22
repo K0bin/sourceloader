@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace CsgoDemoRenderer.ValveTextureFormat
+namespace Csgo.ValveTextureFormat
 {
     public struct Thumbnail
     {
@@ -48,7 +48,7 @@ namespace CsgoDemoRenderer.ValveTextureFormat
             return $"Slice with {Data.Length} bytes";
         }
     }
-    public class VtfFile
+    public class SourceTexture
     {
         private Header header;
         public ImageFormatInfo HighResFormat
@@ -67,7 +67,18 @@ namespace CsgoDemoRenderer.ValveTextureFormat
         {
             get; private set;
         }
-        public VtfFile(BinaryReader reader, int length)
+
+        public int Width
+        {
+            get => header.Width;
+        }
+
+        public int Height
+        {
+            get => header.Height;
+        }
+
+        public SourceTexture(BinaryReader reader)
         {
             header = Header.Read(reader);
             var resourceDictionary = header.BuildResourceDictionary(reader);
@@ -147,7 +158,7 @@ namespace CsgoDemoRenderer.ValveTextureFormat
             }
         }
 
-        public VtfFile(ImageFormatInfo format, MipMap[] mipmaps, ImageFormatInfo thumbnailFormat, Thumbnail thumbnail)
+        public SourceTexture(ImageFormatInfo format, MipMap[] mipmaps, ImageFormatInfo thumbnailFormat, Thumbnail thumbnail)
         {
             this.HighResFormat = format;
             this.LowResFormat = thumbnailFormat;

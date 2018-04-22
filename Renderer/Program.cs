@@ -1,8 +1,8 @@
-﻿using CsgoDemoRenderer.Bsp;
+﻿using Csgo.Bsp;
 using System;
 using System.IO;
 
-namespace CsgoDemoRenderer
+namespace Csgo.Renderer
 {
     class Program
     {

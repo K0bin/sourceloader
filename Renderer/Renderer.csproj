@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Bsp\Bsp.csproj" />
     <ProjectReference Include="..\MapLoader\MapLoader.csproj" />
-    <ProjectReference Include="..\Vtf\Vtf.csproj" />
+    <ProjectReference Include="..\Vtf\ValveTextureFormat.csproj" />
   </ItemGroup>
 
   <ItemGroup>

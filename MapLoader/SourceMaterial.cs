@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace CsgoDemoRenderer.ValveTextureFormat
+namespace Csgo.MapLoader
 {
-    public class Material
+    public class SourceMaterial
     {
-        public string Name
+        private const string ShaderLightMappedGeneric = "lightmappedGeneric";
+
+        public string ShaderName
         {
             get; private set;
         }
@@ -20,8 +22,7 @@ namespace CsgoDemoRenderer.ValveTextureFormat
         {
             get
             {
-                string name;
-                if (Values.TryGetValue("basetexture", out name))
+                if (Values.TryGetValue("basetexture", out string name))
                 {
                     return name;
                 }
@@ -32,17 +33,23 @@ namespace CsgoDemoRenderer.ValveTextureFormat
             }
         }
 
-        public Material(BinaryReader reader, int length)
+        public SourceMaterial(string textureName)
+        {
+            Values.Add("basetexture", textureName);
+            ShaderName = ShaderLightMappedGeneric;
+        }
+
+        public SourceMaterial(BinaryReader reader, int length)
         {
             var text = Encoding.ASCII.GetString(reader.ReadBytes(length));
             var blockStart = text.IndexOf('{');
-            Name = text.Substring(0, blockStart).Replace("\"", "").Trim();
+            ShaderName = text.Substring(0, blockStart).Replace("\"", "").Trim();
             var blockEnd = text.IndexOf('}');
             var block = text.Substring(blockStart, blockEnd - blockStart).Trim();
             var lines = block.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
-                var trimmedLine = line.Replace("$", "").Replace("\"", "").Replace("'", "");
+                var trimmedLine = line.Replace("$", "").Replace("%", "").Replace("\"", "").Replace("'", "");
                 var keyEnd = trimmedLine.IndexOf(' ');
                 if (keyEnd == -1)
                 {

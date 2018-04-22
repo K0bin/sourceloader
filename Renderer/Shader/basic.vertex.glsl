@@ -18,7 +18,7 @@ out vec2 _lightTexCoord;
 
 void main(void) {
 	_position = vec4(position, 1.0);
-	_normal = vec4(normal, 1.0);
+	_normal = vec4(normal, 0.0);
 	_texCoord = texCoord;
 	_lightTexCoord = lightTexCoord;
 	gl_Position = mvp * vec4(position, 1.0);

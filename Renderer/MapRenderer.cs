@@ -1,5 +1,5 @@
-﻿using CsgoDemoRenderer.Bsp;
-using CsgoDemoRenderer.Bsp.LumpData;
+﻿using Csgo.Bsp;
+using Csgo.Bsp.LumpData;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,12 +8,12 @@ using System.IO;
 using System.Numerics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using CsgoDemoRenderer.MapLoader;
+using Csgo.MapLoader;
 
-namespace CsgoDemoRenderer
+namespace Csgo.Renderer
 {
     public class MapRenderer
-    {
+    {/*
         private readonly Map map;
         private readonly MapLoader.MapLoader parser;
         private int bspVao;
@@ -21,6 +21,8 @@ namespace CsgoDemoRenderer
         private int bspIndexBuffer;
         private int program;
         private Dictionary<string, int> textures = new Dictionary<string, int>();
+
+        private RendererPart[] parts;
 
         public Camera Camera
         {
@@ -30,9 +32,10 @@ namespace CsgoDemoRenderer
         public MapRenderer(Map map)
         {
             this.map = map;
-            this.parser = new MapLoader.MapLoader(map, @"C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive");
-            parser.Load();
-            parser.Export("Export");
+            parts = parser.PrepareForRendering();
+            //this.parser = new MapLoader.MapLoader(map, @"C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive");
+            //parser.Load();
+            //parser.Export("Export");
         }
 
         public void Initialize()
@@ -50,11 +53,11 @@ namespace CsgoDemoRenderer
             }, IntPtr.Zero);
             GL.DebugMessageControl(DebugSourceControl.DontCare, DebugTypeControl.DontCare, DebugSeverityControl.DontCare, 0, new int[0], true);
 
-            int count = parser.Parts.Count(p => p.Texture != null);
+            int count = parts.Count(p => p.Texture != null);
             int[] oglTextures = new int[count];
             GL.CreateTextures(TextureTarget.Texture2D, count, oglTextures);
             var texI = 0;
-            foreach (var part in parser.Parts)
+            foreach (var part in parts)
             {
                 var texture = part.Texture;
                 if (texture == null || textures.ContainsKey(part.Name))
@@ -110,7 +113,7 @@ namespace CsgoDemoRenderer
                             data[ii] = mipmap.Data[0, 0, ii];
                         }
                         GL.CompressedTexSubImage2D(TextureTarget.Texture2D, i, 0, 0, mipmap.Width, mipmap.Height, PixelFormat.Rgb, data.Length, data);
-                    }*/
+                    }*
                 }
                 else
                 {
@@ -142,24 +145,30 @@ namespace CsgoDemoRenderer
             Console.WriteLine(infolog);
 
             GL.CreateBuffers(1, out bspIndexBuffer);
-            //GL.NamedBufferStorage(bspIndexBuffer, indices.Count * 4, indices.ToArray(), BufferStorageFlags.ClientStorageBit);
-            GL.NamedBufferData(bspIndexBuffer, parser.Indices.Length * 4, parser.Indices, BufferUsageHint.StaticDraw);
+            GL.NamedBufferStorage(bspIndexBuffer, parser.Indices.Length * sizeof(uint), parser.Indices, BufferStorageFlags.ClientStorageBit);
+            //GL.NamedBufferData(bspIndexBuffer, parser.Indices.Length * 4, parser.Indices, BufferUsageHint.StaticDraw);
 
             GL.CreateBuffers(1, out bspBuffer);
-            //GL.NamedBufferStorage(bspIndexBuffer, indices.Count * 4, indices.ToArray(), BufferStorageFlags.ClientStorageBit);
-            GL.NamedBufferData(bspBuffer, parser.Vertices.Length * Marshal.SizeOf<Vertex>(), parser.Vertices, BufferUsageHint.StaticDraw);
+            GL.NamedBufferStorage(bspBuffer, parser.Vertices.Length * Marshal.SizeOf<Vertex>(), parser.Vertices, BufferStorageFlags.ClientStorageBit);
+            //GL.NamedBufferData(bspBuffer, parser.Vertices.Length * Marshal.SizeOf<Vertex>(), parser.Vertices, BufferUsageHint.StaticDraw);
+
 
             GL.EnableVertexArrayAttrib(bspVao, 0);
             GL.VertexArrayAttribFormat(bspVao, 0, 3, VertexAttribType.Float, false, 0);
             GL.VertexArrayAttribBinding(bspVao, 0, 0);
+
             GL.EnableVertexArrayAttrib(bspVao, 1);
             GL.VertexArrayAttribFormat(bspVao, 1, 3, VertexAttribType.Float, false, 12);
             GL.VertexArrayAttribBinding(bspVao, 1, 0);
+
             GL.EnableVertexArrayAttrib(bspVao, 2);
             GL.VertexArrayAttribFormat(bspVao, 2, 2, VertexAttribType.Float, false, 24);
             GL.VertexArrayAttribBinding(bspVao, 2, 0);
+
+            GL.EnableVertexArrayAttrib(bspVao, 3);
             GL.VertexArrayAttribFormat(bspVao, 3, 2, VertexAttribType.Float, false, 32);
-            GL.VertexArrayAttribBinding(bspVao, 2, 0);
+            GL.VertexArrayAttribBinding(bspVao, 3, 0);
+
             GL.VertexArrayVertexBuffer(bspVao, 0, bspBuffer, IntPtr.Zero, Marshal.SizeOf<Vertex>());
             GL.VertexArrayElementBuffer(bspVao, bspIndexBuffer);
 
@@ -191,17 +200,18 @@ namespace CsgoDemoRenderer
             var rootNode = map.Lumps.GetNodes()[0];
             //RenderNode(rootNode);
             var position = 0;
-            for (int i = 0; i < parser.Parts.Length; i++)
+            for (int i = 0; i < parts.Length; i++)
             {
                 int texture;
-                if (textures.TryGetValue(parser.Parts[i].Name, out texture)) {
+                if (textures.TryGetValue(parts[i].Name, out texture)) {
                     GL.BindTextureUnit(0, texture);
                 }
-                GL.DrawElements(BeginMode.Triangles, parser.Parts[i].IndicesCount, DrawElementsType.UnsignedInt, position * 4);
-                position += parser.Parts[i].IndicesCount;
+                GL.DrawElements(BeginMode.Triangles, parts[i].IndicesCount, DrawElementsType.UnsignedInt, position * 4);
+                position += parts[i].IndicesCount;
             }
             GL.BindVertexArray(0);
             GL.UseProgram(0);
-        }
+}
+*/
     }
 }

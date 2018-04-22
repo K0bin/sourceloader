@@ -17,10 +17,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System.IO;
 
-namespace CsgoDemoRenderer.Bsp
+namespace Csgo.Bsp
 {
-    public class Map
+    public struct Map
     {
+        public string Name;
+
         /// <summary>
         /// BSP file identifier
         /// </summary>

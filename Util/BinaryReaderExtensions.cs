@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CsgoDemoRenderer
+namespace Csgo.Util
 {
     public static class BinaryReaderExtensions
     {
@@ -20,7 +20,7 @@ namespace CsgoDemoRenderer
             handle.Free();
             return structure;
         }
-        public static T[] ReadStructureArray<T>(this BinaryReader reader, int length, int structSize = 0) where T : struct
+        public static T[] ReadStructArray<T>(this BinaryReader reader, int length, int structSize = 0) where T : struct
         {
             if (structSize <= 0)
             {

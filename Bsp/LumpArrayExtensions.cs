@@ -1,10 +1,10 @@
-﻿using CsgoDemoRenderer.Bsp.LumpData;
+﻿using Csgo.Bsp.LumpData;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace CsgoDemoRenderer.Bsp
+namespace Csgo.Bsp
 {
     public static class LumpArrayExtensions
     {
@@ -71,6 +71,10 @@ namespace CsgoDemoRenderer.Bsp
         public static Vector3[] GetVertexNormals(this Lump[] lumps)
         {
             return (lumps[(int)LumpType.VertexNormals].Data as ArrayLumpData<Vector3>)?.Elements;
+        }
+        public static byte[] GetPakFile(this Lump[] lumps)
+        {
+            return (lumps[(int)LumpType.PakFile].Data as ArrayLumpData<byte>)?.Elements;
         }
     }
 }

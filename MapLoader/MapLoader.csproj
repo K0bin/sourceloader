@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>Csgo.MapLoader</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -15,8 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bsp\Bsp.csproj" />
-    <ProjectReference Include="..\VtfLib\VtfLibTest.csproj" />
-    <ProjectReference Include="..\Vtf\Vtf.csproj" />
+    <ProjectReference Include="..\Vtf\ValveTextureFormat.csproj" />
   </ItemGroup>
 
 </Project>
