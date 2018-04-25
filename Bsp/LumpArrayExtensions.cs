@@ -72,6 +72,22 @@ namespace Csgo.Bsp
         {
             return (lumps[(int)LumpType.VertexNormals].Data as ArrayLumpData<Vector3>)?.Elements;
         }
+        public static DisplacementInfo[] GetDisplacementInfos(this Lump[] lumps)
+        {
+            return (lumps[(int)LumpType.DisplacementInfo].Data as ArrayLumpData<DisplacementInfo>)?.Elements;
+        }
+        public static DisplacementTriangle[] GetDisplacementTriangles(this Lump[] lumps)
+        {
+            return (lumps[(int)LumpType.DisplacementTriangles].Data as ArrayLumpData<DisplacementTriangle>)?.Elements;
+        }
+        public static DisplacementVertex[] GetDisplacementVertices(this Lump[] lumps)
+        {
+            return (lumps[(int)LumpType.DisplacementVertices].Data as ArrayLumpData<DisplacementVertex>)?.Elements;
+        }
+        public static Model[] GetModels(this Lump[] lumps)
+        {
+            return (lumps[(int)LumpType.Models].Data as ArrayLumpData<Model>)?.Elements;
+        }
         public static byte[] GetPakFile(this Lump[] lumps)
         {
             return (lumps[(int)LumpType.PakFile].Data as ArrayLumpData<byte>)?.Elements;

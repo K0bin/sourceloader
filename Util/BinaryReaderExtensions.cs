@@ -8,7 +8,7 @@ namespace Csgo.Util
 {
     public static class BinaryReaderExtensions
     {
-        public static T ReadStructure<T>(this BinaryReader reader, int size = 0) where T: struct
+        public static T ReadStruct<T>(this BinaryReader reader, int size = 0) where T: struct
         {
             if (size <= 0)
             {
@@ -31,7 +31,7 @@ namespace Csgo.Util
             var array = new T[count];
             for (var i = 0; i < count; i++)
             {
-                array[i] = reader.ReadStructure<T>(structSize);
+                array[i] = reader.ReadStruct<T>(structSize);
             }
             return array;
         }

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>CsgoDemoRenderer.Bsp</RootNamespace>
+    <RootNamespace>Csgo.Bsp</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

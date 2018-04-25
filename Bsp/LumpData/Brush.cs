@@ -6,10 +6,10 @@ using System.Text;
 
 namespace Csgo.Bsp.LumpData
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Size = 12, Pack = 1)]
     public struct Brush
     {
-        public int firstSide;
+        public int FirstSide;
         public int SidesCount;
         public BrushContents Contents;
 

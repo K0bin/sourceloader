@@ -61,7 +61,7 @@ namespace Csgo.Vtf
                 headerSize = Header.Size72;
             }
             reader.BaseStream.Position = startPosition;
-            var header = reader.ReadStructure<Header>((int)headerSize);
+            var header = reader.ReadStruct<Header>((int)headerSize);
             if (version < new Version(7,3) && header.HeaderSize != headerSize)
             {
                 throw new Exception("Header sizes don't match.");

@@ -22,7 +22,7 @@ namespace Csgo.MapLoader
             this.map = map;
             this.materialManager = materialManager;
             var rootNode = map.Lumps.GetNodes()[0];
-            BuildBuffers(rootNode);
+            Read(rootNode);
 
             var meshParts = new MeshPart[indicesByTexture.Count];
             var modelMaterials = new SourceMaterial[indicesByTexture.Count];
@@ -49,8 +49,32 @@ namespace Csgo.MapLoader
             Materials = modelMaterials;
         }
 
+        private void Read(Node node)
+        {
+            var nodes = map.Lumps.GetNodes();
+            var leafs = map.Lumps.GetLeafs();
+            var leftChild = node.Children[0];
+            ReadChild(leftChild);
+            var rightChild = node.Children[1];
+            ReadChild(rightChild);
+        }
+
+        private void ReadChild(int childIndex)
+        {
+            var nodes = map.Lumps.GetNodes();
+            var leafs = map.Lumps.GetLeafs();
+            if (childIndex < 0)
+            {
+                Read(leafs[-1 - childIndex]);
+            }
+            else
+            {
+                Read(nodes[childIndex]);
+            }
+        }
+
 #pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
-        private void BuildBuffers(Leaf leaf)
+        private void Read(Leaf leaf)
         {
             var bspVertices = map.Lumps.GetVertices();
 
@@ -58,8 +82,7 @@ namespace Csgo.MapLoader
             var faces = map.Lumps.GetFaces();
             var edges = map.Lumps.GetEdges();
             var surfEdges = map.Lumps.GetSurfaceEdges();
-            var normals = map.Lumps.GetVertexNormals();
-            var normalIndices = map.Lumps.GetVertexNormalIndices();
+            var dispInfos = map.Lumps.GetDisplacementInfos();
             for (var leafFaceIndex = leaf.FirstLeafFace; leafFaceIndex < leaf.FirstLeafFace + leaf.LeafFacesCount; leafFaceIndex++)
             {
                 var faceIndex = leafFaces[leafFaceIndex];
@@ -69,8 +92,6 @@ namespace Csgo.MapLoader
                 var textureOffset = map.Lumps.GetTextureDataStringTable()[texData.NameStringTableId];
                 var textureName = map.Lumps.GetTextureDataString()[textureOffset];
                 uint rootVertex = 0;
-
-                //var normal = normals[normalIndices[faceIndex]];
 
                 SourceMaterial material = materialManager[textureName];
                 SourceTexture texture = materialManager.LoadTexture(material?.BaseTextureName);
@@ -86,33 +107,26 @@ namespace Csgo.MapLoader
                     }
                 }
 
-                var faceVertices = new Dictionary<uint, uint>();
+                var faceVertices = new Dictionary<uint, uint>(); //Just to make sure that there's no duplicates
 
                 for (var surfEdgeIndex = face.FirstEdge; surfEdgeIndex < face.FirstEdge + face.EdgesCount; surfEdgeIndex++)
                 {
                     var edgeIndex = surfEdges[surfEdgeIndex];
                     var edge = edges[Math.Abs(edgeIndex)];
 
+                    //Push the two vertices of the first edge
                     if (surfEdgeIndex == face.FirstEdge)
                     {
                         if (!faceVertices.ContainsKey(edge.VertexIndex[edgeIndex > 0 ? 0 : 1]))
                         {
                             rootVertex = edge.VertexIndex[edgeIndex > 0 ? 0 : 1];
-                            var vertex = new Vertex();
-                            vertex.Position = bspVertices[rootVertex];
-                            //vertex.Normal = normal;
-                            if (texWidth != 0 && texHeight != 0)
+
+                            var position = bspVertices[rootVertex];
+                            var vertex = new Vertex
                             {
-                                vertex.TextureCoord = new Vector2
-                                {
-                                    X = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsS) / texWidth,
-                                    Y = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsT) / texHeight,
-                                };
-                            }
-                            else
-                            {
-                                vertex.TextureCoord = new Vector2();
-                            }
+                                Position = position,
+                                TextureCoord = CalculateUV(position, texInfo.TextureVecsS, texInfo.TextureVecsT, texWidth, texHeight)
+                            };
                             faceVertices.Add(rootVertex, (uint)vertices.Count);
                             vertices.Add(vertex);
                         }
@@ -125,41 +139,23 @@ namespace Csgo.MapLoader
                         continue;
                     }
 
+                    //Edge is on opposite side of the first edge => push the 
                     for (var i = 0; i < 2; i++)
                     {
                         if (!faceVertices.ContainsKey(edge.VertexIndex[i]))
                         {
-                            var vertex = new Vertex();
-                            vertex.Position = bspVertices[edge.VertexIndex[i]];
-                            //vertex.Normal = normal;
-                            if (texWidth != 0 && texHeight != 0)
+                            var position = bspVertices[edge.VertexIndex[i]];
+                            var vertex = new Vertex
                             {
-                                vertex.TextureCoord = new Vector2
-                                {
-                                    X = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsS) / texWidth,
-                                    Y = Vector4.Dot(new Vector4(vertex.Position, 1), texInfo.TextureVecsT) / texHeight,
-                                };
-                            }
-                            else
-                            {
-                                vertex.TextureCoord = new Vector2();
-                            }
-                            vertex.LightmapTextureCoord = new Vector2
-                            {
-                                X = (Vector3.Dot(vertex.Position, texInfo.LightmapVecsS.Xyz()) + texInfo.LightmapVecsS.W) / texData.Width,
-                                Y = (Vector3.Dot(vertex.Position, texInfo.LightmapVecsT.Xyz()) + texInfo.LightmapVecsT.W) / texData.Height,
+                                Position = position,
+                                TextureCoord = CalculateUV(position, texInfo.TextureVecsS, texInfo.TextureVecsT, texWidth, texHeight)
                             };
                             faceVertices.Add(edge.VertexIndex[i], (uint)vertices.Count);
                             vertices.Add(vertex);
                         }
                     }
 
-                    List<uint> indices;
-                    if (!indicesByTexture.TryGetValue(textureName, out indices))
-                    {
-                        indices = new List<uint>();
-                        indicesByTexture[textureName] = indices;
-                    }
+                    var indices = GetIndices(textureName);
 
                     indices.Add(faceVertices[rootVertex]);
                     if (edgeIndex < 0)
@@ -173,63 +169,64 @@ namespace Csgo.MapLoader
                         indices.Add(faceVertices[edge.VertexIndex[1]]);
                     }
                 }
+
+                if (face.DisplacementInfo != -1)
+                {
+                    var dispInfo = dispInfos[face.DisplacementInfo];
+                    Read(dispInfo, texInfo);
+                }
             }
-            CalculateNormals();
         }
 #pragma warning restore RECS0018 // Comparison of floating point numbers with equality operator
 
-        private void CalculateNormals()
+        private void Read(DisplacementInfo dispInfo, TextureInfo texInfo)
         {
-            List<uint> indices = new List<uint>();
-            foreach (var (_, textureIndices) in indicesByTexture)
-            {
-                foreach (var index in textureIndices)
-                {
-                    indices.Add(index);
-                }
-            }
-            for (var i = 0; i < indices.Count - 2; i += 3)
-            {
-                var vertex0 = vertices[(int)indices[i]];
-                var vertex1 = vertices[(int)indices[i + 1]];
-                var vertex2 = vertices[(int)indices[i + 2]];
+            var vertices = map.Lumps.GetDisplacementVertices();
+            var triangles = map.Lumps.GetDisplacementTriangles();
+            var texData = map.Lumps.GetTextureData()[texInfo.TextureData];
+            var textureOffset = map.Lumps.GetTextureDataStringTable()[texData.NameStringTableId];
+            var textureName = map.Lumps.GetTextureDataString()[textureOffset];
+            
+            var vertCount = ((1 << (dispInfo.Power)) + 1) * ((1 << (dispInfo.Power)) + 1);
+            var triCount = (1 << (dispInfo.Power)) * (1 << (dispInfo.Power)) * 2;
 
-                var vec1 = vertex0.Position - vertex2.Position;
-                var vec2 = vertex1.Position - vertex2.Position;
-                var cross = Vector3.Cross(vec1, vec2);
-                var surfaceNormal = Vector3.Normalize(cross);
-
-                for (int ii = 0; ii < 3; ii++)
+            for (var i = dispInfo.DisplacementVertexStart; i < dispInfo.DisplacementVertexStart + vertCount; i++)
+            {
+                /*this.vertices.Add(new Vertex
                 {
-                    var vertex = vertices[(int)indices[i + ii]];
-                    vertex.Normal = surfaceNormal;
-                    vertices[(int)indices[i + ii]] = vertex;
-                }
+                    Position = vertices[i].Vector
+                });*/
+
+               //var indices = GetIndices(textureName);
+               // indices.Add((uint)i);
             }
         }
 
-        private void BuildBuffers(Node node)
+        private Vector2 CalculateUV(Vector3 position, Vector4 s, Vector4 t, float texWidth, float texHeight)
         {
-            var nodes = map.Lumps.GetNodes();
-            var leafs = map.Lumps.GetLeafs();
-            var leftChild = node.Children[0];
-            BuildChild(leftChild);
-            var rightChild = node.Children[1];
-            BuildChild(rightChild);
-        }
-
-        private void BuildChild(int childIndex)
-        {
-            var nodes = map.Lumps.GetNodes();
-            var leafs = map.Lumps.GetLeafs();
-            if (childIndex < 0)
+            if (texWidth != 0 && texHeight != 0)
             {
-                BuildBuffers(leafs[-1 - childIndex]);
+                return new Vector2
+                {
+                    X = Vector4.Dot(new Vector4(position, 1), s) / texWidth,
+                    Y = Vector4.Dot(new Vector4(position, 1), t) / texHeight,
+                };
             }
             else
             {
-                BuildBuffers(nodes[childIndex]);
+                return new Vector2();
             }
+        }
+
+        private List<uint> GetIndices(string textureName)
+        {
+            List<uint> indices;
+            if (!indicesByTexture.TryGetValue(textureName, out indices))
+            {
+                indices = new List<uint>();
+                indicesByTexture[textureName] = indices;
+            }
+            return indices;
         }
     }
 }

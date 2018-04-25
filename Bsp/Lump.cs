@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 using Csgo.Bsp.LumpData;
+using Csgo.Bsp.LumpData.GameLumps;
 using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -42,23 +43,24 @@ namespace Csgo.Bsp
         /// </summary>
         public int FourCC;
 
-        public LumpType Offset;
+        public LumpType LumpType;
 
         public LumpData.LumpData Data;
 
         public override string ToString() => $"Lump {Data?.ToString() ?? ""}".Trim();
 
-        public static Lump Read(BinaryReader reader, LumpType offset)
+        public static Lump Read(BinaryReader reader, LumpType type)
         {
             var lump = new Lump();
             lump.FileOffset = reader.ReadInt32();
             lump.FileLength = reader.ReadInt32();
             lump.Version = reader.ReadInt32();
             lump.FourCC = reader.ReadInt32();
-            lump.Offset = offset;
+            lump.LumpType = type;
+
             var position = reader.BaseStream.Position;
             reader.BaseStream.Position = lump.FileOffset;
-            switch (lump.Offset)
+            switch (lump.LumpType)
             {
                 case LumpType.Planes:
                     lump.Data = new ArrayLumpData<LumpData.Plane>(reader, lump.FileLength);
@@ -123,8 +125,14 @@ namespace Csgo.Bsp
                 case LumpType.VertexNormalIndices:
                     lump.Data = new ArrayLumpData<uint>(reader, lump.FileLength);
                     break;
+                case LumpType.Models:
+                    lump.Data = new ArrayLumpData<Model>(reader, lump.FileLength);
+                    break;
                 case LumpType.PakFile:
                     lump.Data = new ArrayLumpData<byte>(reader, lump.FileLength);
+                    break;
+                case LumpType.GameLump:
+                    lump.Data = new GameLump(reader);
                     break;
             }
             reader.BaseStream.Position = position;

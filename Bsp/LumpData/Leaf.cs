@@ -12,8 +12,6 @@ namespace Csgo.Bsp.LumpData
     {
         public BrushContents Contents;
         public short Cluster;
-        //public short Area;
-        //public short Flags;
         public short AreaFlags;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public short[] Mins;
