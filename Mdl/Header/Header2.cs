@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Source.Mdl
+namespace Source.Mdl.Header
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Header2

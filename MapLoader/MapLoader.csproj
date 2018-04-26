@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Mdl\Mdl.csproj" />
     <ProjectReference Include="..\Util\Util.csproj" />
     <ProjectReference Include="..\Vtf\Vtf.csproj" />
+    <ProjectReference Include="..\Vtx\Vtx.csproj" />
   </ItemGroup>
 
 </Project>

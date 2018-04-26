@@ -6,49 +6,6 @@ using Source.Common;
 
 namespace Source.Vtf
 {
-    public struct Thumbnail
-    {
-        public byte[] Data;
-        public ImageFormat Format;
-        public ImageFormatInfo Info;
-        public int Width, Height;
-    }
-    public struct MipMap
-    {
-        public Frame[] Frames;
-        public ImageFormat Format;
-        public ImageFormatInfo Info;
-        public int Width, Height;
-
-        public override string ToString()
-        {
-            return $"Mipmap with {Frames.Length} Frames, Format: {Format.ToString()}, Width: {Width}, Height: {Height}";
-        }
-    }
-    public struct Frame
-    {
-        public Face[] Faces;
-        public override string ToString()
-        {
-            return $"Frame with {Faces.Length} Faces";
-        }
-    }
-    public struct Face
-    {
-        public Slice[] Slices;
-        public override string ToString()
-        {
-            return $"Face with {Slices.Length} Slices";
-        }
-    }
-    public struct Slice
-    {
-        public byte[] Data;
-        public override string ToString()
-        {
-            return $"Slice with {Data.Length} bytes";
-        }
-    }
     public class SourceTexture: Resource
     {
         public Header Header

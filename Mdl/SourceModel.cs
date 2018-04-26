@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Source.Mdl.Header;
 
 namespace Source.Mdl
 {
     public class SourceModel : Resource
     {
-        public Header Header
+        public Header.Header Header
         {
             get; private set;
         }
@@ -36,7 +37,7 @@ namespace Source.Mdl
         public SourceModel(BinaryReader reader, int length)
         {
             var start = reader.BaseStream.Position;
-            Header = reader.ReadStruct<Header>();
+            Header = reader.ReadStruct<Header.Header>();
             var postHeader = reader.BaseStream.Position;
 
             reader.BaseStream.Position = Header.StudioHDR2Index;
@@ -63,6 +64,8 @@ namespace Source.Mdl
                 Materials.Add(reader.ReadNullTerminatedAsciiString());
                 reader.BaseStream.Position = pos;
             }
+
+            reader.BaseStream.Position = start + Header.TextureOffset;
         }
     }
 }
