@@ -9,7 +9,8 @@ namespace Source.Mdl
     {
         public int Id;
         public int Version;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+        public int Checksum;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string Name;
         public int DataLength;
         public Vector3 EyePosition;

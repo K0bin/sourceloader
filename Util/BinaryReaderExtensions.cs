@@ -35,5 +35,17 @@ namespace Source.Util
             }
             return array;
         }
+        public static string ReadNullTerminatedAsciiString(this BinaryReader reader, int maxLength = -1)
+        {
+            StringBuilder builder = new StringBuilder();
+            var i = 0;
+            byte nextChar;
+            while ((nextChar = reader.ReadByte()) != 0 && maxLength == -1 || i < maxLength)
+            {
+                builder.Append((char)nextChar);
+                i++;
+            }
+            return builder.ToString();
+        }
     }
 }

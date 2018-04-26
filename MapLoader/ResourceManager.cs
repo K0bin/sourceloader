@@ -22,6 +22,19 @@ namespace Source.MapLoader
 
         private bool isDisposed = false;
 
+        private static Dictionary<Type, string> paths = new Dictionary<Type, string>()
+        {
+            { typeof(SourceMaterial), "materials/" },
+            { typeof(SourceTexture), "materials/" },
+            { typeof(SourceModel), "models/" },
+        };
+        private static Dictionary<Type, string> fileTypes = new Dictionary<Type, string>()
+        {
+            { typeof(SourceMaterial), ".vmt" },
+            { typeof(SourceTexture), ".vtf" },
+            { typeof(SourceModel), ".mdl" },
+        };
+
         public ResourceManager(string csgoDirectory, Map map)
         {
             csgoResources = new Package();
@@ -64,23 +77,29 @@ namespace Source.MapLoader
                 return null;
             }
 
-            var nameWithType = "";
-            if (typeof(T) == typeof(SourceTexture))
+            var nameWithType = name.ToLower();
+            var path = paths[typeof(T)];
+            var fileType = fileTypes[typeof(T)];
+            if (!nameWithType.StartsWith(path, StringComparison.Ordinal))
             {
-                nameWithType = "materials/" + name.ToLower() + ".vtf";
+                nameWithType = path + nameWithType;
             }
-            else if (typeof(T) == typeof(SourceMaterial))
+            if (!nameWithType.EndsWith(fileType, StringComparison.Ordinal))
             {
-                nameWithType = "materials/" + name.ToLower() + ".vmt";
+                nameWithType = nameWithType + fileType;
             }
-            else if (typeof(T) == typeof(SourceModel))
-            {
-                nameWithType = "models/" + name.ToLower() + ".mdl";
-            }
+
             if (!resources.TryGetValue(nameWithType, out Resource resource))
             {
                 var data = ReadResourceFromDisk(nameWithType);
-                if (data == null)
+                if (data != null)
+                {
+                    using (var reader = new BinaryReader(new MemoryStream(data)))
+                    {
+                        resource = (T)Activator.CreateInstance(typeof(T), reader, data.Length);
+                    }
+                }
+                else
                 {
                     if (typeof(T) == typeof(SourceMaterial))
                     {
@@ -92,13 +111,6 @@ namespace Source.MapLoader
                     else
                     {
                         return null;
-                    }
-                }
-                else
-                {
-                    using (var reader = new BinaryReader(new MemoryStream(data)))
-                    {
-                        resource = (T)Activator.CreateInstance(typeof(T), reader, data.Length);
                     }
                 }
                 resources[nameWithType] = resource;
