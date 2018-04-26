@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util", "Util\Util.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exporter", "Exporter\Exporter.csproj", "{5B4395ED-94B5-4A0B-8CF2-AE310ECB2825}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mdl", "Mdl\Mdl.csproj", "{A2987408-5F2C-4305-87DF-6B22E976BF42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mdl", "Mdl\Mdl.csproj", "{A2987408-5F2C-4305-87DF-6B22E976BF42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{DFB0CB8F-A54E-44CC-8704-1DEC82AAF9D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{DFB0CB8F-A54E-44CC-8704-1DEC82AAF9D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vtx", "Vtx\Vtx.csproj", "{DC8FFC03-90FB-46BD-A61E-B975F054ADCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{DFB0CB8F-A54E-44CC-8704-1DEC82AAF9D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFB0CB8F-A54E-44CC-8704-1DEC82AAF9D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFB0CB8F-A54E-44CC-8704-1DEC82AAF9D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC8FFC03-90FB-46BD-A61E-B975F054ADCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC8FFC03-90FB-46BD-A61E-B975F054ADCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC8FFC03-90FB-46BD-A61E-B975F054ADCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC8FFC03-90FB-46BD-A61E-B975F054ADCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

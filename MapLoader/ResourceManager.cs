@@ -1,6 +1,7 @@
 ﻿using Source.Bsp;
 using Source.Common;
 using Source.Mdl;
+using Source.Mdl.MeshStrip;
 using Source.Vtf;
 using SteamDatabase.ValvePak;
 using System;
@@ -27,12 +28,14 @@ namespace Source.MapLoader
             { typeof(SourceMaterial), "materials/" },
             { typeof(SourceTexture), "materials/" },
             { typeof(SourceModel), "models/" },
+            //{ typeof(SourceMeshStrip), "models/" },
         };
         private static Dictionary<Type, string> fileTypes = new Dictionary<Type, string>()
         {
             { typeof(SourceMaterial), ".vmt" },
             { typeof(SourceTexture), ".vtf" },
             { typeof(SourceModel), ".mdl" },
+            //{ typeof(SourceMeshStrip), ".vtx" },
         };
 
         public ResourceManager(string csgoDirectory, Map map)
@@ -77,6 +80,11 @@ namespace Source.MapLoader
                 return null;
             }
 
+            if (!fileTypes.ContainsKey(typeof(T)))
+            {
+                throw new ArgumentException("Unsupported resource type");
+            }
+
             var nameWithType = name.ToLower();
             var path = paths[typeof(T)];
             var fileType = fileTypes[typeof(T)];
@@ -107,6 +115,10 @@ namespace Source.MapLoader
                         var texture = Get<SourceTexture>(name);
                         if (texture == null) return null;
                         resource = new SourceMaterial(name);
+                    }
+                    else if (typeof(T) == typeof(SourceMeshStrip))
+                    {
+                        return Get<T>(name + ".dx90");
                     }
                     else
                     {
