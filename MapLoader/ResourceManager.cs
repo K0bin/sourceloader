@@ -1,4 +1,4 @@
-﻿using Csgo.Bsp;
+﻿using Source.Bsp;
 using SteamDatabase.ValvePak;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 
-namespace Csgo.MapLoader
+namespace Source.MapLoader
 {
     public class ResourceManager: IDisposable
     {

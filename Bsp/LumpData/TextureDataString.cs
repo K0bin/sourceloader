@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Csgo.Bsp.LumpData
+namespace Source.Bsp.LumpData
 {
     public class TextureDataString: LumpData
     {

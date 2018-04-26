@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Csgo.MapLoader
+namespace Source.MapLoader
 {
     public class SourceMaterial
     {

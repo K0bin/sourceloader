@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>CsgoDemoRenderer.Vtf</RootNamespace>
+    <RootNamespace>Source.Vtf</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

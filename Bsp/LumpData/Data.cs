@@ -1,10 +1,10 @@
-﻿using Csgo.Util;
+﻿using Source.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Csgo.Bsp.LumpData
+namespace Source.Bsp.LumpData
 {
     public class LumpData
     {

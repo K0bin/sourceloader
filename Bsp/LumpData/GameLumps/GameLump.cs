@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Csgo.Bsp.LumpData.GameLumps
+namespace Source.Bsp.LumpData.GameLumps
 {
     public class GameLump: LumpData
     {

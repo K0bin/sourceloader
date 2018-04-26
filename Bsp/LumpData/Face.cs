@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Csgo.Bsp.LumpData
+namespace Source.Bsp.LumpData
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 56)]
     public struct Face

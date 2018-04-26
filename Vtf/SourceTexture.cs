@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Csgo.Vtf
+namespace Source.Vtf
 {
     public struct Thumbnail
     {

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>Csgo.Bsp</RootNamespace>
+    <RootNamespace>Source.Bsp</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

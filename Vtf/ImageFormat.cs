@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Csgo.Vtf
+namespace Source.Vtf
 {
     public enum ImageFormat: uint
     {

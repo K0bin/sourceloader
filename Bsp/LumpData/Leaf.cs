@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using static Csgo.Bsp.LumpData.Brush;
+using static Source.Bsp.LumpData.Brush;
 using System.Runtime.InteropServices;
 
-namespace Csgo.Bsp.LumpData
+namespace Source.Bsp.LumpData
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 32)]
     public struct Leaf

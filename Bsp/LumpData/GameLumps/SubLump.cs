@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Source.Util;
 
-namespace Csgo.Bsp.LumpData.GameLumps
+namespace Source.Bsp.LumpData.GameLumps
 {
     public struct SubLump
     {
@@ -14,6 +15,15 @@ namespace Csgo.Bsp.LumpData.GameLumps
         public int FileLength;
 
         public LumpData Data;
+
+        public string IdName
+        {
+            get
+            {
+                var bytes = BitConverter.GetBytes(Id);
+                return Encoding.ASCII.GetString(bytes).Reverse();
+            }
+        }
 
         public static SubLump Read(BinaryReader reader)
         {
@@ -26,9 +36,9 @@ namespace Csgo.Bsp.LumpData.GameLumps
 
             var position = reader.BaseStream.Position;
             reader.BaseStream.Position = lump.FileOffset;
-            switch (lump.Id)
+            switch (lump.IdName)
             {
-                case 1936749168: //"sprp" ascii
+                case "sprp":
                     lump.Data = new StaticProps(reader, lump.FileLength, lump.Version);
                     break;
             }
@@ -38,8 +48,7 @@ namespace Csgo.Bsp.LumpData.GameLumps
 
         public override string ToString()
         {
-            var bytes = BitConverter.GetBytes(Id);
-            return "SubLump: " + Encoding.ASCII.GetString(bytes);
+            return "SubLump: " + IdName;
         }
     }
 }

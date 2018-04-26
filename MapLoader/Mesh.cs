@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace Csgo.MapLoader
+namespace Source.MapLoader
 {
     public struct Mesh
     {

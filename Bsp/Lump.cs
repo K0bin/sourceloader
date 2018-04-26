@@ -15,13 +15,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-using Csgo.Bsp.LumpData;
-using Csgo.Bsp.LumpData.GameLumps;
+using Source.Bsp.LumpData;
+using Source.Bsp.LumpData.GameLumps;
 using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace Csgo.Bsp
+namespace Source.Bsp
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 16)]
     public struct Lump

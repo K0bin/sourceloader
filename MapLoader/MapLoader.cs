@@ -1,5 +1,5 @@
-﻿using Csgo.Bsp;
-using Csgo.Bsp.LumpData;
+﻿using Source.Bsp;
+using Source.Bsp.LumpData;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -7,12 +7,12 @@ using System.Text;
 using SteamDatabase.ValvePak;
 using System.IO;
 using System.Linq;
-using Csgo.Vtf;
-using Csgo.Util;
+using Source.Vtf;
+using Source.Util;
 using System.Threading;
 using System.IO.Compression;
 
-namespace Csgo.MapLoader
+namespace Source.MapLoader
 {
     public class MapLoader
     {

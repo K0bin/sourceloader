@@ -1,13 +1,13 @@
-﻿using Csgo.Bsp;
-using Csgo.Bsp.LumpData;
-using Csgo.Util;
-using Csgo.Vtf;
+﻿using Source.Bsp;
+using Source.Bsp.LumpData;
+using Source.Util;
+using Source.Vtf;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace Csgo.MapLoader
+namespace Source.MapLoader
 {
     public class BrushModel: Model
     {

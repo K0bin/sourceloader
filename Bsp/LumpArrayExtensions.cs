@@ -1,10 +1,11 @@
-﻿using Csgo.Bsp.LumpData;
+﻿using Source.Bsp.LumpData;
+using Source.Bsp.LumpData.GameLumps;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace Csgo.Bsp
+namespace Source.Bsp
 {
     public static class LumpArrayExtensions
     {
@@ -87,6 +88,10 @@ namespace Csgo.Bsp
         public static Model[] GetModels(this Lump[] lumps)
         {
             return (lumps[(int)LumpType.Models].Data as ArrayLumpData<Model>)?.Elements;
+        }
+        public static GameLump GetGame(this Lump[] lumps)
+        {
+            return (lumps[(int)LumpType.GameLump].Data as GameLump);
         }
         public static byte[] GetPakFile(this Lump[] lumps)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Csgo.Vtf
+namespace Source.Vtf
 {
     enum Resources
     {

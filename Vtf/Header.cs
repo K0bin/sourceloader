@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using Csgo.Util;
+using Source.Util;
 
-namespace Csgo.Vtf
+namespace Source.Vtf
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Header

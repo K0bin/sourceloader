@@ -1,4 +1,4 @@
-﻿using Csgo.Util;
+﻿using Source.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Csgo.Bsp.LumpData.GameLumps
+namespace Source.Bsp.LumpData.GameLumps
 {
     public class StaticProps: LumpData
     {
@@ -27,6 +27,8 @@ namespace Csgo.Bsp.LumpData.GameLumps
 
         public StaticProps(BinaryReader reader, long length, int version)
         {
+            var startPosition = reader.BaseStream.Position;
+
             var modelCount = reader.ReadInt32();
             Models = new List<string>(modelCount);
             for (var i = 0; i < modelCount; i++)
@@ -43,14 +45,51 @@ namespace Csgo.Bsp.LumpData.GameLumps
                 Leafs.Add(reader.ReadUInt16());
             }
 
+            var remainingLength = length - reader.BaseStream.Position + startPosition;
             var propCount = reader.ReadInt32();
             Props = new List<StaticProp>(propCount);
             for (int i = 0; i < propCount; i++)
             {
                 Props.Add(StaticProp.Read(reader, version));
-                //Console.WriteLine("I need model: " + Models[Props[i].PropType]);
+                Console.WriteLine("I need model: " + Models[Props[i].PropType]);
             }
         }
+
+        private int TryRead(BinaryReader reader, int length, int propCount)
+        {
+            var start = reader.BaseStream.Position;
+            try
+            {
+                for (int i = 0; i < propCount; i++)
+                {
+                    var pos = reader.BaseStream.Position;
+                    reader.BaseStream.Position += 24;
+                    var index = reader.ReadUInt16();
+                    var model = Models[Props[i].PropType];
+                    reader.BaseStream.Position = pos + length;
+                }
+                return length;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine("unsuccessful using: "+length);
+                reader.BaseStream.Position = start;
+                return TryRead(reader, length + 1, propCount);
+            }
+        }
+    }
+
+    [Flags]
+    public enum StaticPropFlags : byte
+    {
+        Fades = 1,
+        UseLightingOrigin = 2,
+        NoDraw = 4,
+        IgnoreNormals = 8,
+        NoShadow = 0x10,
+        Unused = 0x20,
+        NoPerVertexLighting = 0x40,
+        NoSelfShadowing = 0x80
     }
 
     public struct StaticProp
@@ -61,8 +100,9 @@ namespace Csgo.Bsp.LumpData.GameLumps
         public ushort PropType;
         public ushort FirstLeaf;
         public ushort LeafCount;
-        public byte Solid;
-        public byte Flags;
+        [MarshalAs(UnmanagedType.U1)]
+        public bool Solid;
+        public StaticPropFlags Flags;
         public int Skin;
         public float FadeMinDistance;
         public float FadeMaxDistance;
@@ -78,23 +118,24 @@ namespace Csgo.Bsp.LumpData.GameLumps
         public byte MinGpuLevel;
         public byte MaxGpuLevel;
         //v7+
-        public Vector4 DiffuseModulation;
+        public uint DiffuseModulation;
         //v10+
         public float Unknown;
         //v9+
-        [MarshalAs(UnmanagedType.U1)]
+        [MarshalAs(UnmanagedType.U4)]
         public bool DisableX360;
 
         public static StaticProp Read(BinaryReader reader, int version)
         {
+            var start = reader.BaseStream.Position;
             var staticProp = new StaticProp();
             staticProp.Origin = reader.ReadStruct<Vector3>();
             staticProp.Angles = reader.ReadStruct<Vector3>();
             staticProp.PropType = reader.ReadUInt16();
             staticProp.FirstLeaf = reader.ReadUInt16();
             staticProp.LeafCount = reader.ReadUInt16();
-            staticProp.Solid = reader.ReadByte();
-            staticProp.Flags = reader.ReadByte();
+            staticProp.Solid = reader.ReadByte() == 1;
+            staticProp.Flags = (StaticPropFlags)reader.ReadByte();
             staticProp.Skin = reader.ReadInt32();
             staticProp.FadeMinDistance = reader.ReadSingle();
             staticProp.FadeMaxDistance = reader.ReadSingle();
@@ -118,7 +159,7 @@ namespace Csgo.Bsp.LumpData.GameLumps
             }
             if (version >= 7)
             {
-                staticProp.DiffuseModulation = reader.ReadStruct<Vector4>();
+                staticProp.DiffuseModulation = reader.ReadUInt32();
             }
             if (version >= 10)
             {
@@ -126,8 +167,9 @@ namespace Csgo.Bsp.LumpData.GameLumps
             }
             if (version >= 9)
             {
-                staticProp.DisableX360 = reader.ReadByte() == 1;
+                staticProp.DisableX360 = reader.ReadInt32() == 1;
             }
+            var structLength = reader.BaseStream.Position - start;
             return staticProp;
         }
     }

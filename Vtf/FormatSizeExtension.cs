@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Csgo.Vtf
+namespace Source.Vtf
 {
     public struct ImageFormatInfo {
         public ImageFormat Format;

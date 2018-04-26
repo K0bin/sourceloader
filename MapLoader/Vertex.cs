@@ -1,11 +1,11 @@
-﻿using Csgo.Bsp;
+﻿using Source.Bsp;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Csgo.MapLoader
+namespace Source.MapLoader
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct Vertex

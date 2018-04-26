@@ -4,7 +4,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Csgo.Bsp.LumpData
+namespace Source.Bsp.LumpData
 {
     [StructLayout(LayoutKind.Sequential, Size = 48, Pack = 1)]
     public struct Model

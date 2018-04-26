@@ -1,11 +1,11 @@
-﻿using Csgo.Bsp;
-using Csgo.MapLoader;
+﻿using Source.Bsp;
+using Source.MapLoader;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Csgo.Exporter
+namespace Source.Exporter
 {
     public static class ExporterExtension
     {
