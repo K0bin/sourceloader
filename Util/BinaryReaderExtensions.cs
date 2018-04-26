@@ -35,6 +35,20 @@ namespace Source.Util
             }
             return array;
         }
+        public static T[] ReadStructArrayCount<T>(this BinaryReader reader, int count, int structSize = 0) where T : struct
+        {
+            if (structSize <= 0)
+            {
+                structSize = Marshal.SizeOf<T>();
+            }
+
+            var array = new T[count];
+            for (var i = 0; i < count; i++)
+            {
+                array[i] = reader.ReadStruct<T>(structSize);
+            }
+            return array;
+        }
         public static string ReadNullTerminatedAsciiString(this BinaryReader reader, int maxLength = -1)
         {
             StringBuilder builder = new StringBuilder();
