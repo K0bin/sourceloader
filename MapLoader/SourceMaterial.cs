@@ -1,20 +1,16 @@
-﻿using System;
+﻿using Source.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
 namespace Source.MapLoader
 {
-    public class SourceMaterial
+    public class SourceMaterial: Resource
     {
         private const string ShaderLightMappedGeneric = "lightmappedGeneric";
 
         public string ShaderName
-        {
-            get; private set;
-        }
-
-        public string Name
         {
             get; private set;
         }
@@ -50,10 +46,9 @@ namespace Source.MapLoader
         {
             Values.Add("basetexture", textureName);
             ShaderName = ShaderLightMappedGeneric;
-            Name = textureName;
         }
 
-        public SourceMaterial(BinaryReader reader, int length, string name)
+        public SourceMaterial(BinaryReader reader, int length)
         {
             var text = Encoding.ASCII.GetString(reader.ReadBytes(length));
             var blockStart = text.IndexOf('{');
@@ -69,11 +64,10 @@ namespace Source.MapLoader
                 {
                     continue;
                 }
-                var key = trimmedLine.Substring(0, keyEnd).ToString();
+                var key = trimmedLine.Substring(0, keyEnd).ToLower();
                 var value = trimmedLine.Substring(keyEnd + 1);
                 Values[key] = value;
             }
-            this.Name = name;
         }
     }
 }

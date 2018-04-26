@@ -20,13 +20,13 @@ namespace Source.MapLoader
         {
             get => mapName;
         }
-        
-        public MaterialManager MaterialManager
-        {
-            get => materialManager;
-        }
 
         public BrushModel Brushes
+        {
+            get; private set;
+        }
+
+        public List<StaticPropModel> StaticProps
         {
             get; private set;
         }
@@ -34,7 +34,6 @@ namespace Source.MapLoader
         private readonly string mapName;
         private readonly Map map;
         private readonly ResourceManager resourceManager;
-        private readonly MaterialManager materialManager;
 
         public MapLoader(string csgoDirectory, string mapName)
         {
@@ -47,9 +46,9 @@ namespace Source.MapLoader
             }
 
             resourceManager = new ResourceManager(csgoDirectory, map);
-            materialManager = new MaterialManager(resourceManager);
 
-            Brushes = new BrushModel(map, materialManager);
+            Brushes = new BrushModel(map, resourceManager);
+            StaticProps = StaticPropModel.ReadProps(map, resourceManager);
         }
     }
 }

@@ -10,10 +10,10 @@ namespace Source.Bsp.LumpData.GameLumps
         public int LumpCount
         { get; private set; }
 
-        public Dictionary<int, SubLump> Lumps
+        public Dictionary<string, SubLump> Lumps
         {
             get; private set;
-        } = new Dictionary<int, SubLump>();
+        } = new Dictionary<string, SubLump>();
 
         public GameLump(BinaryReader reader)
         {
@@ -22,7 +22,7 @@ namespace Source.Bsp.LumpData.GameLumps
             for (int i = 0; i < LumpCount; i++)
             {
                 var lump = SubLump.Read(reader);
-                Lumps[lump.Id] = lump;
+                Lumps[lump.IdName] = lump;
             }
         }
     }

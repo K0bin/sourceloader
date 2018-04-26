@@ -10,6 +10,8 @@ namespace Source.Bsp.LumpData.GameLumps
 {
     public class StaticProps: LumpData
     {
+        public const string IdName = "sprp";
+
         public List<string> Models
         {
             get; private set;
@@ -51,7 +53,6 @@ namespace Source.Bsp.LumpData.GameLumps
             for (int i = 0; i < propCount; i++)
             {
                 Props.Add(StaticProp.Read(reader, version));
-                Console.WriteLine("I need model: " + Models[Props[i].PropType]);
             }
         }
 

@@ -12,15 +12,15 @@ namespace Source.MapLoader
     public class BrushModel: Model
     {
         private readonly Map map;
-        private readonly MaterialManager materialManager;
+        private readonly ResourceManager resourceManager;
 
         private readonly Dictionary<string, List<uint>> indicesByTexture = new Dictionary<string, List<uint>>();
         private readonly List<Vertex> vertices = new List<Vertex>();
 
-        public BrushModel(Map map, MaterialManager materialManager)
+        public BrushModel(Map map, ResourceManager resourceManager)
         {
             this.map = map;
-            this.materialManager = materialManager;
+            this.resourceManager = resourceManager;
             var rootNode = map.Lumps.GetNodes()[0];
             Read(rootNode);
 
@@ -37,7 +37,7 @@ namespace Source.MapLoader
                 }
 
                 meshParts[i] = new MeshPart { Indices = indices.ToArray() };
-                modelMaterials[i] = materialManager[materialName];
+                modelMaterials[i] = resourceManager.Get<SourceMaterial>(materialName);
                 i++;
             }
 
@@ -93,8 +93,8 @@ namespace Source.MapLoader
                 var textureName = map.Lumps.GetTextureDataString()[textureOffset];
                 uint rootVertex = 0;
 
-                SourceMaterial material = materialManager[textureName];
-                SourceTexture texture = materialManager.LoadTexture(material?.BaseTextureName);
+                SourceMaterial material = resourceManager.Get<SourceMaterial>(textureName);
+                SourceTexture texture = resourceManager.Get<SourceTexture>(material?.BaseTextureName);
 
                 float texWidth = texData.Width;
                 float texHeight = texData.Height;

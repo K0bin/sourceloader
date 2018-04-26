@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using Source.Common;
 
 namespace Source.Vtf
 {
@@ -48,7 +49,7 @@ namespace Source.Vtf
             return $"Slice with {Data.Length} bytes";
         }
     }
-    public class SourceTexture
+    public class SourceTexture: Resource
     {
         public Header Header
         {
@@ -63,7 +64,7 @@ namespace Source.Vtf
             get; private set;
         }
 
-        public SourceTexture(BinaryReader reader)
+        public SourceTexture(BinaryReader reader, int length) //length parameter is necessary for instance creation via reflection
         {
             Header = Header.Read(reader);
             var resourceDictionary = Header.BuildResourceDictionary(reader);

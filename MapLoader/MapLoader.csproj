@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bsp\Bsp.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Mdl\Mdl.csproj" />
     <ProjectReference Include="..\Util\Util.csproj" />
     <ProjectReference Include="..\Vtf\Vtf.csproj" />
   </ItemGroup>
