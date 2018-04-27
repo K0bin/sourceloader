@@ -6,7 +6,7 @@ using System.Text;
 namespace Source.Mdl.Header
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class ModelHeader
+    public struct ModelHeader
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string Name;
@@ -17,13 +17,24 @@ namespace Source.Mdl.Header
         public int MeshIndex;
 
         public int VertexCount;
-        public int VertexInfoIndex;
         public int VertexIndex;
-        public int NormalCount;
-        public int NormalInfoIndex;
-        public int NormalIndex;
+        public int TangentIndex;
 
-        public int GroupCount;
-        public int GroupIndex;
+        public int AttachmentCount;
+        public int AttachmentIndex;
+
+        public int EyeBallCount;
+        public int EyeBallIndex;
+
+        public VertexData VertexData;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+        public int[] Unused;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
+    public struct VertexData
+    {
+
     }
 }

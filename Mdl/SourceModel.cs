@@ -19,17 +19,22 @@ namespace Source.Mdl
             get; private set;
         }
 
-        public List<string> Materials
+        public string[] Materials
         {
             get; private set;
-        } = new List<string>();
+        }
 
-        public List<string> MaterialPaths
+        public string[] MaterialPaths
         {
             get; private set;
-        } = new List<string>();
+        }
 
         public Texture[] Textures
+        {
+            get; private set;
+        }
+
+        public BodyPart[] BodyParts
         {
             get; private set;
         }
@@ -44,28 +49,43 @@ namespace Source.Mdl
             Header2 = reader.ReadStruct<Header2>();
 
             reader.BaseStream.Position = start + Header.TextureDirOffset;
+            MaterialPaths = new string[Header.TextureDirCount];
             for (var i = 0; i < Header.TextureDirCount; i++)
             {
                 var offset = reader.ReadInt32();
                 var pos = reader.BaseStream.Position;
                 reader.BaseStream.Position = start + offset;
                 var path = reader.ReadNullTerminatedAsciiString();
-                MaterialPaths.Add(path);
+                MaterialPaths[i] = path;
                 reader.BaseStream.Position = pos;
             }
 
             reader.BaseStream.Position = start + Header.TextureOffset;
             Textures = new Texture[Header.TextureCount];
+            Materials = new string[Header.TextureCount];
             for (var i = 0; i < Textures.Length; i++)
             {
                 var pos = reader.BaseStream.Position;
                 Textures[i] = reader.ReadStruct<Texture>();
                 reader.BaseStream.Position = pos + Textures[i].NameOffset;
-                Materials.Add(reader.ReadNullTerminatedAsciiString());
+                Materials[i] = reader.ReadNullTerminatedAsciiString();
                 reader.BaseStream.Position = pos;
             }
 
+            reader.BaseStream.Position = start + Header.BodyPartOffset;
+            BodyParts = new BodyPart[Header.BodyPartCount];
+            for (var i = 0; i < Header.BodyPartCount; i++)
+            {
+                var bodyPartHeader = reader.ReadStruct<BodyPartHeader>();
+                BodyParts[i] = new BodyPart(bodyPartHeader, reader);
+            }
+
             reader.BaseStream.Position = start + Header.TextureOffset;
+        }
+
+        public override string ToString()
+        {
+            return $"SourceModel {Header.Name} with {Textures.Length} Textures and {BodyParts.Length} BodyParts";
         }
     }
 }

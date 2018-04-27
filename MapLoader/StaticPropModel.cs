@@ -13,7 +13,7 @@ namespace Source.MapLoader
         {
             this.Position = prop.Origin;
             var modelName = models[prop.PropType];
-            var model = resourceManager.Get<SourceModel>(modelName);
+            var model = resourceManager.Get<SourceModel>(modelName.Replace('\\', '/').ToLower().Trim());
         }
 
         public static List<StaticPropModel> ReadProps(Map map, ResourceManager manager)

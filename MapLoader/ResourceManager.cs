@@ -80,6 +80,9 @@ namespace Source.MapLoader
                 return null;
             }
 
+            //Sanitize resource string
+            name = name.Replace('\\', '/').Trim().ToLower();
+
             if (!fileTypes.ContainsKey(typeof(T)))
             {
                 throw new ArgumentException("Unsupported resource type");
