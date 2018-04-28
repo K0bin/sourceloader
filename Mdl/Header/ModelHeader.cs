@@ -26,14 +26,14 @@ namespace Source.Mdl.Header
         public int EyeBallCount;
         public int EyeBallIndex;
 
-        public VertexData VertexData;
+        public ModelVertexData VertexData;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         public int[] Unused;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
-    public struct VertexData
+    public struct ModelVertexData
     {
 
     }

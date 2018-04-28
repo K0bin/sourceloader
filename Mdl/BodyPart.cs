@@ -27,7 +27,7 @@ namespace Source.Mdl
             Name = reader.ReadNullTerminatedAsciiString();
             reader.BaseStream.Position = start;
 
-            reader.BaseStream.Position = header.ModelOffset;
+            reader.BaseStream.Position = start + header.ModelOffset;
             Models = new Model[header.ModelCount];
             for (var i = 0; i < header.ModelCount; i++)
             {

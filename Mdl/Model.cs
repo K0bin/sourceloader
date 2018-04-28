@@ -21,7 +21,7 @@ namespace Source.Mdl
         {
             this.Header = header;
             var start = reader.BaseStream.Position;
-            reader.BaseStream.Position = header.MeshIndex;
+            reader.BaseStream.Position = start + header.MeshIndex;
             Meshes = new Mesh[header.MeshCount];
             for (var i = 0; i < header.MeshCount; i++)
             {
