@@ -6,13 +6,15 @@ So far only tested with CSGO maps but should work with most other source maps as
 
 What's working:
 * loading the BSP tree and most (relevant) lumps
+* loading most of the MDL file (although that's useless without the geometry found in .vtx files)
 * loading 2D VTF textures (cubemaps might work as well, didn't test that)
 * extracting basic brush geometry
 * exporting as OBJ
 
 What's missing:
 * the skybox
-* static props
+* .vtx mesh strips
+* static props (work for it is mostly done, except for .vtx)
 * displacements
 * lightmaps (work for it is mostly done, just needs to be brought together)
 * exporting materials
