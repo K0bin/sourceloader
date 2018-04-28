@@ -16,3 +16,5 @@ What's missing:
 * displacements
 * lightmaps (work for it is mostly done, just needs to be brought together)
 * exporting materials
+
+The Unity branch is an outdated version of the same code that was tweaked to work with .Net 3.5.
